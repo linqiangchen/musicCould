@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <audio src="" class="music"></audio>
+    <div class="box">
+
+        <div class="wrap">
+            <div class="left">
+                <div class="tit">
+                    <h2>歌曲列表</h2>
+                    <div class="search"><input type="text" placeholder="输入歌曲或歌手"><button class="btn"></button></div>
+                </div>
+                <table class="table  table-hover">
+                    <thead>
+                        <tr class="active">
+                            <th>序号</th>
+                            <th>歌曲标题</th>
+                            <th>时长</th>
+                            <th>歌手</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <ul>
+                    <!-- <li>
+                            <img src="https://p1.music.126.net/FK0G_3VwpsYfVUaGkSnILg==/3393092908419035.jpg" alt="">
+                            <p>
+                                <span>扶桑</span>
+                                國漫教你好人就是好人，坏人就是坏人。 日漫教你世上没有绝对的好人与坏人，坏人也许也不想成为坏人，或许是因为自己必须得守护一些东西。
+                            </p>
+                        </li> -->
+                </ul>
+            </div>
+            <div class="right">
+                <img src="" alt="" class="songs-img">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bottomWrap">
+        <div class="bottom">
+            <div class="cor">
+                <div class="cor_img prev"> <img src="./image/上一首.png" alt=""></div>
+                <div class="cor_img c_play"> <img src="./image/播放.png" alt=""></div>
+                <div class="cor_img next"> <img src=".//image/下一首.png" alt=""></div>
+            </div>
+            <span class="time_">00:00</span>
+            <div class="bar">
+                <div class="play_time"></div>
+            </div>
+            <span class="time"></span>
+        </div>
+    </div>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
