@@ -8,6 +8,10 @@ li {
   list-style: none;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes changeright {
   0% {
     transform: rotate(0deg);
@@ -57,9 +61,23 @@ body {
 }
 
 .box .wrap .left .tit h2 {
+  cursor: pointer;
   font-size: 26px;
   color: maroon;
   line-height: 60px;
+}
+
+.box .wrap .left .tit span {
+  font-size: 18px;
+  color: maroon;
+  cursor: pointer;
+}
+
+.box .wrap .left .tit i {
+  font-size: 18px;
+  color: maroon;
+  cursor: pointer;
+  font-style: normal;
 }
 
 .box .wrap .left .tit .search {
@@ -128,11 +146,18 @@ body {
 }
 
 .box .wrap .left ul li p {
+  width: 100%;
   font-size: 12px;
   color: #555;
 }
 
 .box .wrap .left ul li p span {
+  color: maroon;
+}
+
+.box .wrap .left ul li p i {
+  font-style: normal;
+  float: right;
   color: maroon;
 }
 
@@ -148,11 +173,11 @@ body {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  box-shadow: 0 0 60px lightskyblue;
+  box-shadow: 0 0 30px maroon;
 }
 
 .box .wrap .right ul {
-  margin-top: 10px;
+  margin-top: 30px;
   padding-bottom: 60px;
   margin-bottom: 40px;
 }
@@ -179,6 +204,16 @@ body {
   position: fixed;
   height: 60px;
   bottom: 0px;
+}
+
+.bottomWrap p {
+  width: 100%;
+  min-width: 1260px;
+  text-align: center;
+  font-size: 14px;
+  color: maroon;
+  position: absolute;
+  top: 5px;
 }
 
 .bottomWrap .bottom {

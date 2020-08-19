@@ -24,12 +24,13 @@ class Music {
         this.lyric = ""; //歌词
         this.currLyric = 0; //当前歌词
         this.prevLyric = 0; //上一条歌词
+        
     }
-    toggleActive() {//切换播放歌曲列表样式
+    toggleActive() { //切换播放歌曲列表样式
         $('tbody tr').removeClass('activeM');
         $('tbody tr').eq(this.Index).addClass('activeM')
     }
-    loadRight(id) {//加载歌曲海报
+    loadRight(id) { //加载歌曲海报
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=detail&id=${id}`,
@@ -42,8 +43,11 @@ class Music {
             }
         })
     }
-    bindEvent() {//绑定事件
+    bindEvent() { //绑定事件
         let that = this
+       $('.tit i').click(function(){
+        requestFullScreen();
+       })
         this.$play.click(() => { //播放与暂停
             if (this.isPlay) {
                 this.pauseMusic()
@@ -51,61 +55,67 @@ class Music {
                 this.playMusic()
             }
         });
-        this.next.click(function () {//下一首
-            that.initBar()//初始化控制条
+        $('.tit span').click(function () {
+            that.toggleList($(this).attr('_id'))
+        })
+        this.next.click(function () { //下一首
+            that.initBar() //初始化控制条
             that.Index++;
             if (that.Index > 9) {
                 that.Index = 0
             }
-            that.toggleMusic()//切换播放歌曲
+            that.toggleMusic() //切换播放歌曲
         })
-        this.prev.click(function () {//下一首
-            that.initBar()//初始化控制条
+        this.prev.click(function () { //下一首
+            that.initBar() //初始化控制条
             that.Index--;
             if (that.Index < 0) {
                 that.Index = 9
             }
-            that.toggleMusic()//切换播放歌曲
+            that.toggleMusic() //切换播放歌曲
         })
-        this.music.onended = function () {//播放结束播放下一首
-            that.initBar()//初始化控制条
+        this.music.onended = function () { //播放结束播放下一首
+            that.initBar() //初始化控制条
             that.Index++;
             if (that.Index > 9) {
                 that.Index = 0
             }
-            that.toggleMusic()//切换播放歌曲
+            that.toggleMusic() //切换播放歌曲
         }
-        this.bar.click(function (e) {//点击进度条快进
-            if (!that.isPlay) {//判断播放状态
+        $('.tit h2').click(() => {
+
+        })
+        this.bar.click(function (e) { //点击进度条快进
+            if (!that.isPlay) { //判断播放状态
                 return;
             }
-            clearInterval(that.timer)//清除定时器
-            that.timeBal.width(e.offsetX);//设置进度条宽度
-            that.moveBar()//开启进度条运动
+            clearInterval(that.timer) //清除定时器
+            that.timeBal.width(e.offsetX); //设置进度条宽度
+            that.moveBar() //开启进度条运动
             that.music.currentTime = e.offsetX * that.dt / 1000000;
-            that.curTime = that.music.currentTime;//更新播放时间
-             for (let i = 0 , n= that.lyric.length; i < n; i++) {
-                if(that.lyric.eq(i).attr('t') >= that.curTime*1000){
+            that.curTime = that.music.currentTime; //更新播放时间
+            for (let i = 0, n = that.lyric.length; i < n; i++) {
+                if (that.lyric.eq(i).attr('t') >= that.curTime * 1000) {
                     that.currLyric = i;
                     that.lyric.eq(that.currLyric).addClass('lyricActive');
+                    
                     if (that.currLyric) {
                         that.lyric.eq(that.prevLyric).removeClass('lyricActive');
                     }
                     that.prevLyric = that.currLyric;
                     break;
-                   
                 }
             };
-            that.startTime.text(that.min(that.curTime * 1000))//更新播放时间
+            that.startTime.text(that.min(that.curTime * 1000)) //更新播放时间
         });
-        this.inpSearch.keyup(function(e){
-            if(e.keyCode === 13 && that.inpSearch.val().trim()){
+        this.inpSearch.keyup(function (e) {
+            if (e.keyCode === 13 && that.inpSearch.val().trim()) {
                 $.ajax({
                     type: 'get',
-                    url: `https://v1.alapi.cn/api/music/search?keyword=${that.inpSearch.val()}`,
+                    url: `/api?s=${that.inpSearch.val()}&limit=20&type=1`,
                     dataType: 'json',
                     success: (data) => {
-                        let res = data.data.songs
+                        let res = data.result.songs
                         let div = ''
                         that.musicId = []
                         res.forEach((item, index) => {
@@ -120,6 +130,7 @@ class Music {
                         $('tbody').html(div)
                         $('tbody').on('click', 'tr', function () {
                             that.initBar()
+                            
                             that.Index = $(this).index('tbody tr');
                             that.pauseMusic()
                             that.toggleActive()
@@ -129,22 +140,22 @@ class Music {
                 })
             }
         })
-        this.search.click(function () {//搜索歌曲
+        this.search.click(function () { //搜索歌曲
             if (!that.inpSearch.val().trim()) {
                 return;
             }
             $.ajax({
                 type: 'get',
-                url: `https://v1.alapi.cn/api/music/search?keyword=${that.inpSearch.val()}`,
+                url: `/api?s=${that.inpSearch.val()}&limit=20&type=1`,
                 dataType: 'json',
                 success: (data) => {
-                    let res = data.data.songs
+                    let res = data.result.songs
                     let div = ''
                     that.musicId = []
                     res.forEach((item, index) => {
                         that.musicId.push(item.id)
                         div += `<tr _id=${item.id}>
-                            <td>${index}</td>
+                            <td>${index+1}</td>
                             <td>${item.name}</td>
                         <td>${that.min(item.duration)}</td>
                         <td>${item.artists[0].name}</td>
@@ -162,29 +173,34 @@ class Music {
             })
         })
     }
-    initBar() {//初始化进度条
+    initBar() { //初始化进度条
         clearInterval(this.timer);
         this.timeBal.width(0);
         this.curTime = 0;
         this.startTime.text(this.min(this.curTime * 1000));
     }
-    moveBar() {//控制进度条
+    toggleLyric(){
+        if (this.music.currentTime * 1000 >= (+this.lyric.eq(this.currLyric).attr('t')) && (this.lyric.length >= 1)) {
+            this.lyric.eq(this.currLyric).addClass('lyricActive');
+            $('.show_lyric').text(this.lyric.eq(this.currLyric).text())
+            
+            if (this.currLyric) {
+                this.lyric.eq(this.prevLyric).removeClass('lyricActive');
+            }
+            this.prevLyric = this.currLyric;
+            this.currLyric++;
+            if (this.currLyric >= this.lyric) {
+                this.currLyric = 0
+            }
+        }
+    }
+    moveBar() { //控制进度条
         clearInterval(this.timer);
         this.timer = setInterval(() => {
             let _width = this.timeBal.width();
             this.curTime++;
             // 歌词滚动
-            if (this.music.currentTime * 1000 >= (+this.lyric.eq(this.currLyric).attr('t')) && (this.lyric.length >= 1)) {
-                this.lyric.eq(this.currLyric).addClass('lyricActive');
-                if (this.currLyric) {
-                    this.lyric.eq(this.prevLyric).removeClass('lyricActive');
-                }
-                this.prevLyric = this.currLyric;
-                this.currLyric++;
-                if (this.currLyric >= this.lyric) {
-                    this.currLyric = 0
-                }
-            }
+            this.toggleLyric()
             this.startTime.text(this.min(this.curTime * 1000))
             _width += 1000000 / this.dt
             if (_width >= 1000) {
@@ -195,16 +211,48 @@ class Music {
             this.timeBal.css('width', _width + 'px');
         }, 1000)
     }
-    toggleMusic() {//切换播放歌曲
+    toggleMusic() { //切换播放歌曲
         this.loadMusic(this.musicId[this.Index]);
         this.loadSongs(this.musicId[this.Index]);
         this.loadLyric(this.musicId[this.Index]);
-        this.loadComment(this.musicId[this.Index])
+        this.loadComment(this.musicId[this.Index]);
+        this.lyric = "";
+        $('.show_lyric').text('')
         this.currLyric = 0;
         this.prevLyric = 0;
         this.toggleActive()
     }
-    loadCor(id, dt) {//加载进度条
+    toggleList(id) {
+        $.ajax({
+            type: 'get',
+            url: `https://api.imjad.cn/cloudmusic/?limit=20&type=playlist&id=${id}`,
+            dataType: 'json',
+            success: (data) => {
+                let res = data.playlist.tracks
+                let div = ''
+                this.musicId = [];
+                res.forEach((item, index) => {
+                    this.musicId.push(item.id)
+                    div += `<tr _id=${item.id}>
+                        <td>${index+1}</td>
+                        <td>${item.name}</td>
+                    <td>${this.min(item.dt)}</td>
+                    <td>${item.ar[0].name}</td>
+                </tr>`
+                })
+                $('tbody').html(div);
+                let that = this
+                $('tbody').on('click', 'tr', function () {
+                    that.initBar()
+                    that.Index = $(this).index('tbody tr');
+                    that.pauseMusic()
+                    that.toggleActive()
+                    that.toggleMusic()
+                })
+            }
+        })
+    }
+    loadCor(id, dt) { //加载进度条
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=song&id=${id}`,
@@ -216,7 +264,7 @@ class Music {
             }
         })
     }
-    loadMusic(id) {//加载歌曲
+    loadMusic(id) { //加载歌曲
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=song&id=${id}`,
@@ -229,13 +277,14 @@ class Music {
             }
         })
     }
-    loadComment(id) {//加载热评
+    loadComment(id) { //加载热评
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=comments&id=${id}`,
             dataType: 'json',
             success: (data) => {
                 let res = data.hotComments;
+
                 let li = ''
                 res.forEach(item => {
                     li += ` <li>
@@ -243,14 +292,16 @@ class Music {
                     <p>
                         <span>${item.user.nickname} </span>
                         ${item.content} 
+                        <i>${this.toggleDate(item.time)}</i>
                     </p>
+                    
                 </li>`
                 });
                 $('.left ul').html(li)
             }
         })
     }
-    loadSongs(id) {//加载歌曲信息
+    loadSongs(id) { //加载歌曲信息
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=detail&id=${id}`,
@@ -264,11 +315,11 @@ class Music {
             }
         })
     }
-    loadList() {//加载歌曲列表
+    loadList() { //加载歌曲列表
         let that = this
         $.ajax({
             type: 'get',
-            url: 'https://api.imjad.cn/cloudmusic/?type=playlist&id=523519208',
+            url: 'https://api.imjad.cn/cloudmusic/?limit=20&type=playlist&id=523519208',
             dataType: 'json',
             success: (data) => {
                 let res = data.playlist.tracks
@@ -283,7 +334,7 @@ class Music {
             }
         })
     }
-    loadLyric(id) {//加载歌词
+    loadLyric(id) { //加载歌词
         let that = this;
         $.ajax({
             type: 'get',
@@ -328,7 +379,8 @@ class Music {
         });
     }
     updateTable(res) {
-        let div = ''
+        let div = '';
+        this.musicId = [];
         res.forEach((item, index) => {
             this.musicId.push(item.id)
             div += `<tr _id=${item.id}>
@@ -338,7 +390,7 @@ class Music {
             <td>${item.ar[0].name}</td>
         </tr>`
         })
-        $('tbody').append(div)
+        $('tbody').html(div)
         this.loadLyric(res[0].id);
         this.loadComment(res[0].id)
         this.loadRight(res[0].id)
@@ -353,6 +405,13 @@ class Music {
         let mins = this.add(parseInt(s / 60000))
         let _s = this.add(parseInt((s % 60000) / 1000))
         return mins + ':' + _s
+    }
+    toggleDate(time) {
+        let date = new Date(time)
+        let year = date.getFullYear();
+        let mouth = this.add(date.getMonth() + 1);
+        let day = this.add(date.getDate())
+        return year + '年' + mouth + '月' + day + '日'
     }
     playMusic() {
         this.music.play();
@@ -370,6 +429,7 @@ class Music {
     }
 }
 new Music()
+
 function createLrcObj(lrc) {
     var oLRC = {
         ti: "", //歌曲名
@@ -412,4 +472,14 @@ function createLrcObj(lrc) {
         return a.t - b.t;
     });
     return oLRC
+}
+function requestFullScreen() {
+	var de = document.documentElement;
+	if (de.requestFullscreen) {
+		de.requestFullscreen();
+	} else if (de.mozRequestFullScreen) {
+		de.mozRequestFullScreen();
+	} else if (de.webkitRequestFullScreen) {
+		de.webkitRequestFullScreen();
+	}
 }
