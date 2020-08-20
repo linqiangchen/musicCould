@@ -25,6 +25,11 @@ body {
   height: 100%;
 }
 
+::-webkit-scrollbar {
+  display: none;
+  /* Chrome Safari */
+}
+
 .box {
   height: calc(100% - 60px);
   width: 1260px;
@@ -53,14 +58,19 @@ body {
   align-items: center;
   font-size: 26px;
   line-height: 60px;
-  border-bottom: 4px maroon solid;
 }
 
 .box .wrap .left .tit span {
+  box-sizing: border-box;
+  display: block;
   cursor: pointer;
   font-size: 16px;
   color: maroon;
-  line-height: 60px;
+  height: 60px;
+}
+
+.box .wrap .left .tit .playlist {
+  border-bottom: 4px solid maroon;
 }
 
 .box .wrap .left .tit i {
@@ -135,6 +145,11 @@ body {
   width: 100%;
   text-align: center;
   cursor: pointer;
+}
+
+.box .wrap .left nav a {
+  border: 1px solid maroon;
+  color: maroon;
 }
 
 .box .wrap .left nav .myActive a {

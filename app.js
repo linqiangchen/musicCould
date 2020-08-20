@@ -18,7 +18,7 @@ app.get('/songs', (req, res) => {
     let type = +req.query.type;
     switch (type) {
         case 0:
-            res.json(songs.result.tracks);
+            res.json(songs.result.tracks.slice(0,200));
             break;
         case 1:
             res.json(songs1.result.tracks);

@@ -87,15 +87,9 @@ class Music {
             that.page = 1;
             that.type = $(this).attr('_id')
             that.loadListByPage()
-
-
-            // if(e.target.className ==='my'){
-            //     that.loadListByPage()
-            //     $('nav').css('display','block')
-            // }else{
-            //     $('nav').css('display','none')
-            //     that.toggleList($(this).attr('_id'))
-            // }
+            
+            $('.tit span').removeClass('playlist')
+            $(this).addClass('playlist')
 
         })
         this.next.click(function () { //下一首

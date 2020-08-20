@@ -28,7 +28,9 @@ body {
     height: 100%;
 
 }
-
+::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
 .box {
     height: calc(100% - 60px);
     width: 1260px;
@@ -57,15 +59,20 @@ body {
                 align-items: center;
                 font-size: 26px;
                 line-height: 60px;
-                border-bottom: 4px maroon solid;
-
+                // border-bottom: 4px maroon solid;
+                
                 span {
+                    box-sizing: border-box;
+                    display: block;
                     cursor: pointer;
                     font-size: 16px;
                     color: maroon;
-                    line-height: 60px;
+                    height: 60px;
+                   
                 }
-
+                .playlist{
+                    border-bottom:  4px solid maroon;
+                }
                 i {
                     font-style: normal;
                     cursor: pointer;
@@ -144,7 +151,10 @@ body {
                 width: 100%;
                 text-align: center;
                 cursor: pointer;
-
+                a{
+                    border:1px solid maroon;
+                    color:maroon
+                }
                 .myActive a {
                     background-color: maroon;
                     color: #fff
