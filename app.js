@@ -13,7 +13,14 @@ const {
 const cors = require('cors');
 var app = express();
 app.use(express.static('../music'))
-
+app.all('*', function (req, res, next) {
+    // 解决跨域
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Headers', 'Content-type');
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS,PATCH");
+    res.header('Access-Control-Max-Age', 1728000); //预请求缓存20天
+    next();
+  });
 app.get('/songs', (req, res) => {
     let type = +req.query.type;
     switch (type) {

@@ -23,6 +23,7 @@ li {
 html,
 body {
   height: 100%;
+  font-family: 'Microsoft Yahei';
 }
 
 ::-webkit-scrollbar {
@@ -204,6 +205,12 @@ body {
   box-shadow: 0 0 60px lightskyblue;
 }
 
+.box .wrap .right .songName {
+  margin-top: 10px;
+  font-size: 16px;
+  color: maroon;
+}
+
 .box .wrap .right ul {
   margin-top: 10px;
   padding-bottom: 60px;
@@ -228,7 +235,7 @@ body {
 .bottomWrap {
   width: 100%;
   margin: 0 auto;
-  min-width: 1260px;
+  min-width: 1300px;
   position: fixed;
   height: 60px;
   bottom: 0px;
@@ -244,13 +251,20 @@ body {
 }
 
 .bottomWrap .bottom {
-  width: 1260px;
+  width: 1300px;
   padding: 0 20px;
   margin: 0 auto;
   display: flex;
   height: 60px;
   background-color: #FFF;
   align-items: center;
+}
+
+.bottomWrap .bottom .order {
+  margin-left: 10px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
 }
 
 .bottomWrap .bottom .cor {
@@ -284,7 +298,7 @@ body {
 }
 
 .bottomWrap .bottom .time {
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .bottomWrap .bottom .bar {

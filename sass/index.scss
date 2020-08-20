@@ -26,7 +26,7 @@ li {
 html,
 body {
     height: 100%;
-
+    font-family: 'Microsoft Yahei';
 }
 ::-webkit-scrollbar {
     display: none; /* Chrome Safari */
@@ -209,7 +209,11 @@ body {
                 border-radius: 50%;
                 box-shadow: 0 0 60px lightskyblue;
             }
-
+            .songName{
+                margin-top: 10px;
+                font-size: 16px;
+                color:maroon;
+            }
             ul {
                 margin-top: 10px;
                 padding-bottom: 60px;
@@ -240,7 +244,7 @@ body {
 .bottomWrap {
     width: 100%;
     margin: 0 auto;
-    min-width: 1260px;
+    min-width: 1300px;
     position: fixed;
     height: 60px;
     bottom: 0px;
@@ -255,14 +259,19 @@ body {
     }
 
     .bottom {
-        width: 1260px;
+        width: 1300px;
         padding: 0 20px;
         margin: 0 auto;
         display: flex;
         height: 60px;
         background-color: #FFF;
         align-items: center;
-
+        .order{
+            margin-left: 10px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
         .cor {
             width: 120px;
             display: flex;
@@ -295,7 +304,7 @@ body {
         }
 
         .time {
-            margin-left: 5px;
+            margin-left: 10px;
         }
 
         .bar {

@@ -28,6 +28,10 @@ class Music {
         this.num = "" //分页数量
         this.offsetPage = $('.pagination');
         this.type = 0;
+        this.playPage = 0;
+        this.order = $('.order');
+        this.playOrder = 0;
+        this.songName = $('.songName')
     }
     toggleActive() { //切换播放歌曲列表样式
         $('tbody tr').removeClass('activeM');
@@ -43,6 +47,7 @@ class Music {
                     return;
                 }
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
+                this.songName.text(data.songs[0].name);
             }
         })
     }
@@ -57,6 +62,29 @@ class Music {
             that.pauseMusic()
             that.toggleActive()
             that.toggleMusic()
+        })
+        $(document).keydown(function(e){
+            e.preventDefault()
+            if(e.keyCode === 32){
+                console.log(that.isPlay)
+                if(that.isPlay) {
+                    that.pauseMusic()
+                }else{
+                    that.playMusic()
+                }
+                
+            }
+           
+        })
+        this.order.click(function(){
+            that.playOrder ++;
+            that.playOrder %=2;
+            $(this).attr('src',`./image/${that.playOrder}.png`)
+            if(that.playOrder){
+                $(this).attr('title',`随机播放`)
+            }else{
+                $(this).attr('title',`顺序播放`)
+            }
         })
         this.offsetPage.on('click', '.num', function () {
             that.page = $(this).index('.num') + 1;
@@ -97,7 +125,11 @@ class Music {
                 return
             }
             that.initBar() //初始化控制条
-            that.Index++;
+            if(that.playOrder){
+                that.randomMusic()
+            }else{
+                 that.Index++;
+            } 
             if (that.Index % 10 === 0) {
                 that.page++;
                 that.loadListByPage() //切换播放歌曲
@@ -115,7 +147,7 @@ class Music {
             }
             that.initBar() //初始化控制条
             that.Index--;
-            if (that.Index % 9 === 0) {
+            if (that.Index % 9 === 0 && that.Index !=0) {
                 that.page--;
                 that.loadListByPage() //切换播放歌曲
             }
@@ -128,7 +160,11 @@ class Music {
         })
         this.music.onended = function () { //播放结束播放下一首
             that.initBar() //初始化控制条
-            that.Index++;
+            if(that.playOrder){
+                that.randomMusic()
+            }else{
+                 that.Index++;
+            }  
             if (that.Index > that.musicId.length) {
                 that.Index = 0
             }
@@ -255,6 +291,7 @@ class Music {
             this.startTime.text(this.min(this.curTime * 1000))
             _width += 1000000 / this.dt
             if (_width >= 1000) {
+                _width = 1000
                 clearInterval(this.timer);
                 this.timeBal.css('width', 0 + 'px');
                 this.currLyric = 0;
@@ -263,7 +300,6 @@ class Music {
         }, 1000)
     }
     toggleMusic() { //切换播放歌曲
-
         this.loadMusic(this.musicId[this.Index]);
         this.loadSongs(this.musicId[this.Index]);
         this.loadLyric(this.musicId[this.Index]);
@@ -272,6 +308,7 @@ class Music {
         $('.show_lyric').text('')
         this.currLyric = 0;
         this.prevLyric = 0;
+        this.playPage = this.page;
         this.toggleActive()
     }
     toggleList(id) {
@@ -311,6 +348,10 @@ class Music {
                 this.dt = dt
             }
         })
+    }
+    randomMusic(){
+        this.Index = parseInt(Math.random()*(this.musicId.length));
+
     }
     loadMusic(id) {
         //加载歌曲
@@ -366,7 +407,9 @@ class Music {
             url: `https://api.imjad.cn/cloudmusic/?type=detail&id=${id}`,
             dataType: 'json',
             success: (data) => {
+                
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
+                this.songName.text(data.songs[0].name)
                 this.musicImg.removeClass('ani')
                 this.musicImg.addClass('ani')
                 this.endTime.text(this.min(data.songs[0].dt))
@@ -447,8 +490,10 @@ class Music {
                 let that = this
                 this.num.removeClass('myActive')
                 this.num.eq(this.page - 1).addClass('myActive');
-                this.toggleActive()
-                // 
+                if(this.page === this.playPage){
+                     this.toggleActive()
+                }
+               
             }
         })
     }
