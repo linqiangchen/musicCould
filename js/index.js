@@ -24,13 +24,14 @@ class Music {
         this.lyric = ""; //歌词
         this.currLyric = 0; //当前歌词
         this.prevLyric = 0; //上一条歌词
-        this.page = 1;//当前页数
-        this.num = ""//分页数量
+        this.page = 1; //当前页数
+        this.num = "" //分页数量
         this.offsetPage = $('.pagination');
+        this.type = 0;
     }
     toggleActive() { //切换播放歌曲列表样式
         $('tbody tr').removeClass('activeM');
-        $('tbody tr').eq(this.Index%10).addClass('activeM')
+        $('tbody tr').eq(this.Index % 10).addClass('activeM')
     }
     loadRight(id) { //加载歌曲海报
         $.ajax({
@@ -46,35 +47,35 @@ class Music {
         })
     }
     bindEvent() { //绑定事件
-    let that = this;
-       $('.tit i').click(function(){
-        requestFullScreen();//全屏
-       })
-       $('tbody').on('click', 'tr', function () {
-        that.initBar()//初始化控制条
-        that.Index = $(this).index('tbody tr') +( that.page-1)*10;//切换当前播放歌曲索引
-        that.pauseMusic()
-        that.toggleActive()
-        that.toggleMusic()
-    })
-       this.offsetPage.on('click','.num',function(){
-           that.page = $(this).index('.num') + 1;
-           that.loadListByPage();
-       })
-       this.offsetPage.on('click','.prevPage',function(){
-        that.page -=1 ;
-        if(that.page <=0 ){
-            that.page = that.num.length
-        }
-        that.loadListByPage()
-    })
-    this.offsetPage.on('click','.nextPage',function(){
-        that.page += 1;
-        if(that.page >that.num.length ){
-            that.page = 1
-        }
-        that.loadListByPage()
-    })
+        let that = this;
+        $('.tit i').click(function () {
+            requestFullScreen(); //全屏
+        })
+        $('tbody').on('click', 'tr', function () {
+            that.initBar() //初始化控制条
+            that.Index = $(this).index('tbody tr') + (that.page - 1) * 10; //切换当前播放歌曲索引
+            that.pauseMusic()
+            that.toggleActive()
+            that.toggleMusic()
+        })
+        this.offsetPage.on('click', '.num', function () {
+            that.page = $(this).index('.num') + 1;
+            that.loadListByPage();
+        })
+        this.offsetPage.on('click', '.prevPage', function () {
+            that.page -= 1;
+            if (that.page <= 0) {
+                that.page = that.num.length
+            }
+            that.loadListByPage()
+        })
+        this.offsetPage.on('click', '.nextPage', function () {
+            that.page += 1;
+            if (that.page > that.num.length) {
+                that.page = 1
+            }
+            that.loadListByPage()
+        })
         this.$play.click(() => { //播放与暂停
             if (this.isPlay) {
                 this.pauseMusic()
@@ -83,47 +84,52 @@ class Music {
             }
         });
         $('.tit span').click(function (e) {
-            if(e.target.className ==='my'){
-                that.loadListByPage()
-                $('nav').css('display','block')
-            }else{
-                $('nav').css('display','none')
-                that.toggleList($(this).attr('_id'))
-            }
-           
+            that.page = 1;
+            that.type = $(this).attr('_id')
+            that.loadListByPage()
+
+
+            // if(e.target.className ==='my'){
+            //     that.loadListByPage()
+            //     $('nav').css('display','block')
+            // }else{
+            //     $('nav').css('display','none')
+            //     that.toggleList($(this).attr('_id'))
+            // }
+
         })
         this.next.click(function () { //下一首
-            if(that.Index === that.musicId-1){
+            if (that.Index === that.musicId - 1) {
                 return
             }
             that.initBar() //初始化控制条
             that.Index++;
-            if(that.Index%10 === 0){
+            if (that.Index % 10 === 0) {
                 that.page++;
-             that.loadListByPage() //切换播放歌曲
+                that.loadListByPage() //切换播放歌曲
             }
             that.toggleActive()
             if (that.Index > that.musicId.length) {
                 that.Index = 0
             }
-            
+
             that.toggleMusic() //切换播放歌曲
         })
         this.prev.click(function () { //下一首
-            if(that.Index === 0){
+            if (that.Index === 0) {
                 return
             }
             that.initBar() //初始化控制条
             that.Index--;
-            if(that.Index%9 === 0){
+            if (that.Index % 9 === 0) {
                 that.page--;
-             that.loadListByPage() //切换播放歌曲
+                that.loadListByPage() //切换播放歌曲
             }
             that.toggleActive()
             if (that.Index < 0) {
-                that.Index = that.musicId.length-1
+                that.Index = that.musicId.length - 1
             }
-            
+
             that.toggleMusic() //切换播放歌曲
         })
         this.music.onended = function () { //播放结束播放下一首
@@ -132,14 +138,14 @@ class Music {
             if (that.Index > that.musicId.length) {
                 that.Index = 0
             }
-            
-            if(that.Index%10 === 0){
+
+            if (that.Index % 10 === 0) {
                 that.page++;
-             that.loadListByPage() //切换播放歌曲
+                that.loadListByPage() //切换播放歌曲
             }
             that.toggleActive()
             that.toggleMusic() //切换播放歌曲
-            
+
         }
         this.bar.click(function (e) { //点击进度条快进
             if (!that.isPlay) { //判断播放状态
@@ -154,7 +160,7 @@ class Music {
                 if (that.lyric.eq(i).attr('t') >= that.curTime * 1000) {
                     that.currLyric = i;
                     that.lyric.eq(that.currLyric).addClass('lyricActive');
-                    
+
                     if (that.currLyric) {
                         that.lyric.eq(that.prevLyric).removeClass('lyricActive');
                     }
@@ -171,14 +177,14 @@ class Music {
                     url: `/api/search/pc?s=${that.inpSearch.val()}&limit=20&type=1`,
                     dataType: 'json',
                     success: (data) => {
-                        $('nav').css('display','none')
+                        $('nav').css('display', 'none')
                         let res = data.result.songs
                         let div = ''
                         that.page = 1;
                         that.Index = 0;
-                        that.musicId =  res.map(item => item.id)
+                        that.musicId = res.map(item => item.id)
                         res.forEach((item, index) => {
-                    
+
                             div += `<tr _id=${item.id}>
                                 <td>${index+1}</td>
                                 <td>${item.name}</td>
@@ -187,7 +193,7 @@ class Music {
                         </tr>`
                         })
                         $('tbody').html(div)
-                 
+
                     }
                 })
             }
@@ -201,12 +207,12 @@ class Music {
                 url: `/api/search/pc?s=${that.inpSearch.val()}&limit=20&type=1`,
                 dataType: 'json',
                 success: (data) => {
-                    $('nav').css('display','none')
+                    $('nav').css('display', 'none')
                     let res = data.result.songs
                     let div = ''
                     that.page = 1;
                     that.Index = 0;
-                    that.musicId =  res.map(item => item.id)
+                    that.musicId = res.map(item => item.id)
                     res.forEach((item, index) => {
                         div += `<tr _id=${item.id}>
                             <td>${index+1}</td>
@@ -216,7 +222,7 @@ class Music {
                     </tr>`
                     })
                     $('tbody').html(div)
-                    
+
                 }
             })
         })
@@ -227,14 +233,14 @@ class Music {
         this.curTime = 0;
         this.startTime.text(this.min(this.curTime * 1000));
     }
-    toggleLyric(){
-        if(this.lyric.length<2){
+    toggleLyric() {
+        if (this.lyric.length < 2) {
             return;
         }
         if (this.music.currentTime * 1000 >= (+this.lyric.eq(this.currLyric).attr('t')) && (this.lyric.length >= 1)) {
             this.lyric.eq(this.currLyric).addClass('lyricActive');
             $('.show_lyric').text(this.lyric.eq(this.currLyric).text())
-            
+
             if (this.currLyric) {
                 this.lyric.eq(this.prevLyric).removeClass('lyricActive');
             }
@@ -263,7 +269,7 @@ class Music {
         }, 1000)
     }
     toggleMusic() { //切换播放歌曲
-        
+
         this.loadMusic(this.musicId[this.Index]);
         this.loadSongs(this.musicId[this.Index]);
         this.loadLyric(this.musicId[this.Index]);
@@ -284,16 +290,16 @@ class Music {
                 let div = '';
                 this.Index = 0;
                 this.page = 1
-                this.musicId =  res.map(item => item.id)
+                this.musicId = res.map(item => item.id)
                 res.forEach((item, index) => {
                     div += `<tr _id=${item.id}>
                         <td>${index+1}</td>
-                        <td class="songName">${item.name}</td>
+                        <td class="songName"><p>${item.name}</p></td>
                     <td>${this.min(item.dt)}</td>
                     <td>${item.ar[0].name}</td>
                 </tr>`
                 })
-              
+
                 $('tbody').html(div);
                 let that = this
                 // 
@@ -312,27 +318,27 @@ class Music {
             }
         })
     }
-    loadMusic(id) { 
+    loadMusic(id) {
         //加载歌曲
-   
+
         $.ajax({
             type: 'get',
             url: `https://api.imjad.cn/cloudmusic/?type=song&id=${id}`,
             dataType: 'json',
             success: (data) => {
-            
-                if(!data.data[0].url){
-                   
-                  this.Index +=1
+
+                if (!data.data[0].url) {
+
+                    this.Index += 1
                     this.toggleMusic()
                     return
-                }else{
+                } else {
                     $(this.music).attr('src', data.data[0].url);
-                setTimeout(() => {
-                    this.playMusic()
-                }, 150)
+                    setTimeout(() => {
+                        this.playMusic()
+                    }, 150)
                 }
-                
+
             }
         })
     }
@@ -378,14 +384,14 @@ class Music {
         let that = this
         $.ajax({
             type: 'get',
-            url: '/songs',
+            url: '/songs?type=0',
             dataType: 'json',
             success: (data) => {
-                let res = data.slice((this.page - 1)*10,(this.page*10));
+                let res = data.slice((this.page - 1) * 10, (this.page * 10));
                 let pageLi = ''
                 this.musicId = data.map(item => item.id)
-    
-                for(let i = 0;i<data.length/10;i++){
+
+                for (let i = 0; i < data.length / 10; i++) {
                     pageLi += ` <li class="num"><a >${i+1}</a></li>`
                 }
                 this.offsetPage.html(`<li class="prevPage">
@@ -400,34 +406,53 @@ class Music {
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>`)
-              this.num = $('.num')
-              this.num.eq(0).addClass('myActive')
+                this.num = $('.num')
+                this.num.eq(0).addClass('myActive')
                 this.updateTable(res);
-                // 
+
             }
         })
     }
-    loadListByPage(){
+    loadListByPage() {
         $.ajax({
             type: 'get',
-            url: '/songs',
+            url: '/songs?type=' + this.type,
             dataType: 'json',
             success: (data) => {
-                let res = data.slice((this.page - 1)*10,(this.page*10))
+                
+                let res = data.slice((this.page - 1) * 10, (this.page * 10))
                 let div = ''
                 this.musicId = data.map(item => item.id)
                 res.forEach((item, index) => {
                     div += `<tr _id=${item.id}>
                         <td>${(this.page - 1)*10+index+1}</td>
-                        <td class="songName">${item.name}</td>
+                        <td class="songName"><p>${item.name}</p></td>
                     <td>${this.min(item.duration)}</td>
                     <td>${item.artists[0].name}</td>
                 </tr>`
                 })
+                let pageLi = ''
+                for (let i = 0; i < data.length / 10; i++) {
+                    pageLi += ` <li class="num"><a >${i+1}</a></li>`
+                }
+                this.offsetPage.html(`<li class="prevPage">
+                <a aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            ${pageLi}
+     
+              <li class="nextPage"> 
+                <a  aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>`)
+                this.num = $('.num')
+                this.num.eq(0).addClass('myActive')
                 $('tbody').html(div);
                 let that = this
                 this.num.removeClass('myActive')
-                this.num.eq(this.page-1).addClass('myActive');
+                this.num.eq(this.page - 1).addClass('myActive');
                 this.toggleActive()
                 // 
             }
@@ -440,7 +465,7 @@ class Music {
             url: `https://api.imjad.cn/cloudmusic/?type=lyric&id=${id}`,
             dataType: 'json',
             success: (data) => {
-                
+
                 if (!data.lrc || !data.lrc.lyric) {
                     $('.right ul').html('<li>暂无歌词</li>');
                     return;
@@ -480,10 +505,10 @@ class Music {
     }
     updateTable(res) {
         let div = '';
-        res.forEach((item, index) => {  
+        res.forEach((item, index) => {
             div += `<tr _id=${item.id}>
                 <td>${index+1}</td>
-                <td class="songName">${item.name}</td>
+                <td class="songName"><p>${item.name}</p></td>
             <td>${this.min(item.duration)}</td>
             <td>${item.artists[0].name}</td>
         </tr>`
@@ -527,7 +552,8 @@ class Music {
     }
 }
 let music = new Music()
-console.log('music: ', music);
+
+
 function createLrcObj(lrc) {
     var oLRC = {
         ti: "", //歌曲名
@@ -571,13 +597,14 @@ function createLrcObj(lrc) {
     });
     return oLRC
 }
+
 function requestFullScreen() {
-	var de = document.documentElement;
-	if (de.requestFullscreen) {
-		de.requestFullscreen();
-	} else if (de.mozRequestFullScreen) {
-		de.mozRequestFullScreen();
-	} else if (de.webkitRequestFullScreen) {
-		de.webkitRequestFullScreen();
-	}
+    var de = document.documentElement;
+    if (de.requestFullscreen) {
+        de.requestFullscreen();
+    } else if (de.mozRequestFullScreen) {
+        de.mozRequestFullScreen();
+    } else if (de.webkitRequestFullScreen) {
+        de.webkitRequestFullScreen();
+    }
 }

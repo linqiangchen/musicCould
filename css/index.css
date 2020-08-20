@@ -32,7 +32,7 @@ body {
 }
 
 .box .wrap {
-  width: 1260px;
+  width: 1300px;
   margin: 0 auto;
   display: flex;
   height: calc(100%);
@@ -40,7 +40,7 @@ body {
 }
 
 .box .wrap .left {
-  width: 800px;
+  width: 900px;
   margin: 0 auto;
   margin-bottom: 40px;
 }
@@ -102,6 +102,10 @@ body {
   background-size: contain;
 }
 
+.box .wrap .left table {
+  width: 900px;
+}
+
 .box .wrap .left table thead tr th {
   background-color: #C62F2F;
   color: #fff;
@@ -116,8 +120,11 @@ body {
   box-sizing: border-box;
 }
 
-.box .wrap .left table tr .songName {
+.box .wrap .left table tr .songName p {
   width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .box .wrap .left table .activeM {
