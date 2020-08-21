@@ -33,6 +33,8 @@ class Music {
         this.playOrder = 0;
         this.songName = $('.songName');
         this.isSearch = false;
+        this.playListId = ''
+        this.initSearch()
     }
     toggleActive() { //切换播放歌曲列表样式
         $('tbody tr').removeClass('activeM');
@@ -64,10 +66,29 @@ class Music {
             that.toggleActive()
             that.toggleMusic()
         })
+        $('.hot').on('click', 'li', function (e) {
+           that.inpSearch.val($(this).attr('keyword'))
+           
+           $('.hot').css('z-index','-1');
+           that.isSearch = true;
+           that.searchSong()
+           return false;
+        })
+        that.inpSearch.focus(function(){
+            $('.hot').css('z-index','1')
+            $('.hot').css('opacity','1')
+        })
+        that.inpSearch.blur(function(){
+            setTimeout(()=>{
+                $('.hot').css('z-index','-1')
+            },500)
+            
+            $('.hot').css('opacity','0')
+        })
         $(document).keydown(function (e) {
-            e.preventDefault()
+            
             if (e.keyCode === 32) {
-                
+                e.preventDefault()
                 if (that.isPlay) {
                     that.pauseMusic()
                 } else {
@@ -89,13 +110,7 @@ class Music {
         })
         this.offsetPage.on('click', '.num', function () {
             that.page = $(this).index('.num') + 1;
-            
-
-            if(that.isSearch){
-                that.searchSongByPage()
-            }else{
-                that.loadListByPage();
-            }
+            that.checkPlayList();
             
         })
         this.offsetPage.on('click', '.prevPage', function () {
@@ -103,22 +118,14 @@ class Music {
             if (that.page <= 0) {
                 that.page = that.num.length
             }
-            if(that.isSearch){
-                that.searchSongByPage()
-            }else{
-                that.loadListByPage();
-            }
+            that.checkPlayList();
         })
         this.offsetPage.on('click', '.nextPage', function () {
             that.page += 1;
             if (that.page > that.num.length) {
                 that.page = 1
             }
-            if(that.isSearch){
-                that.searchSongByPage()
-            }else{
-                that.loadListByPage();
-            }
+            that.checkPlayList();
         })
         this.$play.click(() => { //播放与暂停
             if (this.isPlay) {
@@ -129,12 +136,20 @@ class Music {
         });
         $('.tit span').click(function (e) {
             that.page = 1;
-            that.type = $(this).attr('_id')
+            that.type = $(this).attr('_id');
+            that.playListId = $(this).attr('_id');
             that.isSearch = false
             if(that.isSearch){
                 that.searchSongByPage()
             }else{
-                that.loadListByPage();
+                
+                if(e.target.className === 'my'){
+                   
+                    that.loadListByPage()
+                }else{
+                    that.loadPlayList();
+                }
+               
             }
 
             $('.tit span').removeClass('playlist')
@@ -237,11 +252,25 @@ class Music {
         })
         this.search.click(function () { //搜索歌曲
             if (!that.inpSearch.val().trim()) {
-                return;
+               that.inpSearch.val(that.inpSearch.attr('default'))
             }
             that.isSearch = true
             that.searchSong()
         })
+    }
+    checkPlayList(){
+        
+        if(this.isSearch){
+            this.searchSongByPage()
+        }else{
+            if(this.type !== '0'){
+                
+                this.loadPlayList()
+            }else{
+                this.loadListByPage();
+            }
+         
+        }
     }
     initBar() { //初始化进度条
         clearInterval(this.timer);
@@ -300,9 +329,11 @@ class Music {
     searchSong(){
         $.ajax({
             type: 'get',
-            url: `/api/search/pc?s=${this.inpSearch.val()}&limit=100&type=1`,
+            url: ` http://10.20.158.17:3000/search?keywords=${this.inpSearch.val()}&limit=100&type=1`,
+            // http://10.20.158.17:3000/search?keywords=%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA&limit=100
             dataType: 'json',
             success: (data) => {
+                
             let res = data.result.songs;
             let res2 = res.slice((this.page - 1) * 10, (this.page * 10));
             let div = ''
@@ -423,7 +454,7 @@ class Music {
 
         $.ajax({
             type: 'get',
-            url: `https://api.imjad.cn/cloudmusic/?type=song&id=${id}`,
+            url: `http://localhost:3000/song/url?id=${id}`,
             dataType: 'json',
             success: (data) => {
 
@@ -514,6 +545,52 @@ class Music {
 
             }
         })
+    }
+    loadPlayList(id){
+        $.ajax({
+            type: 'get',
+            url: `http://10.20.158.17:3000/playlist/detail?id=${this.playListId}`,
+            dataType: 'json',
+            success: (data) => {
+                let res = data.playlist.tracks.slice((this.page - 1) * 10, (this.page * 10))
+                let div = ''
+                this.musicId = data.playlist.tracks.map(item => item.id)
+                res.forEach((item, index) => {
+                    div += `<tr _id=${item.id}>
+                        <td>${(this.page - 1)*10+index+1}</td>
+                        <td class="songName"><p>${item.name}</p></td>
+                    <td>${this.min(item.dt)}</td>
+                    <td>${item.ar[0].name}</td>
+                </tr>`
+                })
+                let pageLi = ''
+                for (let i = 0; i < data.playlist.tracks.length / 10; i++) {
+                    pageLi += ` <li class="num"><a >${i+1}</a></li>`
+                }
+                this.offsetPage.html(`<li class="prevPage">
+                <a aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            ${pageLi}
+     
+              <li class="nextPage"> 
+                <a  aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>`)
+                this.num = $('.num')
+                this.num.eq(0).addClass('myActive')
+                $('tbody').html(div);
+                let that = this
+                this.num.removeClass('myActive')
+                this.num.eq(this.page - 1).addClass('myActive');
+                if (this.page === this.playPage) {
+                    this.toggleActive()
+                }
+
+            }
+        }) 
     }
     loadListByPage() {
         $.ajax({
@@ -653,9 +730,32 @@ class Music {
         this.$play.attr('src', './image/播放.png')
         clearInterval(this.timer)
     }
+    initSearch(){
+        $.ajax({
+            type: 'get',
+            url: `http://10.20.158.17:3000/search/default`,
+            dataType: 'json',
+            success: (data) => {
+                this.inpSearch.attr('placeholder',data.data.showKeyword);
+                this.inpSearch.attr('default',data.data.realkeyword);
+            }
+        });
+        $.ajax({
+            type: 'get',
+            url: `http://10.20.158.17:3000/search/hot/detail`,
+            dataType: 'json',
+            success: (data) => {
+               let li = '';
+               data.data.slice(0,15).forEach(item =>{
+                   li +=  `<li keyword=${item.searchWord}>${item.searchWord}<span>${item.content}</span></li>`
+               })
+               $('.hot').html(li)
+            }
+        })
+    }
 }
 let music = new Music()
-console.log('music: ', music);
+
 function createLrcObj(lrc) {
     var oLRC = {
         ti: "", //歌曲名
