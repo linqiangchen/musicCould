@@ -35,8 +35,9 @@ class Music {
         this.songName = $('.songName');
         this.isSearch = false;
         this.playListId = ''
+        this.host = 'http://eveal.cn:3003'
         this.initSearch();
-        this.host = 'http://10.20.158.17:3000'
+        
     }
     toggleActive() { //切换播放歌曲列表样式
         $('tbody tr').removeClass('activeM');
@@ -447,7 +448,7 @@ class Music {
         let that = this
         $.ajax({
             type: 'get',
-            url: '/songs?type=0',
+            url: 'http://eveal.cn:3000/songs?type=0',
             dataType: 'json',
             success: (data) => {
                 let res = data.slice((this.page - 1) * 10, (this.page * 10));
@@ -653,9 +654,11 @@ class Music {
         clearInterval(this.timer)
     }
     initSearch() {//初始化搜索框数据
+        // console.log(this.host)
+        // console.log(this)
         $.ajax({
             type: 'get',
-            url: `http://10.20.158.17:3000/search/default`,
+            url: `${this.host}/search/default`,
             dataType: 'json',
             success: (data) => {
                 this.inpSearch.attr('placeholder', data.data.showKeyword);
@@ -664,7 +667,7 @@ class Music {
         });
         $.ajax({
             type: 'get',
-            url: `http://10.20.158.17:3000/search/hot/detail`,
+            url: `${this.host}/search/hot/detail`,
             dataType: 'json',
             success: (data) => {
                 let li = '';
@@ -677,7 +680,7 @@ class Music {
         setInterval(() => {
             $.ajax({
                 type: 'get',
-                url: `http://10.20.158.17:3000/search/default`,
+                url: `${this.host}/search/default`,
                 dataType: 'json',
                 success: (data) => {
                     this.inpSearch.attr('placeholder', data.data.showKeyword);

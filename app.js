@@ -47,19 +47,7 @@ app.get('/songs', (req, res) => {
             break;
     }
 })
-app.use(cors({
-    credentials: true,
-    optionsSuccessStatus: 200,
-    origin: 'http://eveal.cn:3002' // 设置为项目所在服务器目录(允许跨域请求的网址)
-}));
 
-app.use('/api', createProxyMiddleware({
-    target: 'http://music.163.com/api', // 服务器api地址目录
-    changeOrigin: true,
-    pathRewrite: {
-        "^/api": ""
-    }
-}));
 app.listen(3007, '0.0.0.0', function () { // 代理接口
     console.log('代理接口启动成功');
 })
