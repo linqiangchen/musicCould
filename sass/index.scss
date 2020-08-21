@@ -27,17 +27,18 @@ html,
 body {
     height: 100%;
     font-family: 'Microsoft Yahei';
+    min-width: 1360px;
 }
-::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
-  }
+
+// ::-webkit-scrollbar {
+//     display: none; /* Chrome Safari */
+//   }
 .box {
     height: calc(100% - 60px);
     width: 1260px;
     margin: 0 auto;
 
     .wrap {
-
         width: 1300px;
         margin: 0 auto;
         display: flex;
@@ -59,8 +60,8 @@ body {
                 align-items: center;
                 font-size: 26px;
                 line-height: 60px;
+
                 // border-bottom: 4px maroon solid;
-                
                 span {
                     box-sizing: border-box;
                     display: block;
@@ -68,11 +69,13 @@ body {
                     font-size: 16px;
                     color: maroon;
                     height: 60px;
-                   
+
                 }
-                .playlist{
-                    border-bottom:  4px solid maroon;
+
+                .playlist {
+                    border-bottom: 4px solid maroon;
                 }
+
                 i {
                     font-style: normal;
                     cursor: pointer;
@@ -87,19 +90,26 @@ body {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    border-bottom: 1px maroon solid;
                     input {
+                        width: 249px;
                         font-size: 14px;
                         color: maroon;
-                        padding: 4px 30px 4px 10px;
+                        padding: 10px 30px 10px 10px;
+                        border-radius: 5px 5px 0 0;
                         outline: none;
                         border: none;
+                        border: 1px maroon solid;
+                        border-bottom: none;
+                        // border:1px solid maroon;
+                        // box-sizing: border-box;
                         width: 250px;
                         height: 28px;
                     }
-                    
+                    input::placeholder {
+                        color: #999;
+                    }
                     button {
-                        left: 222px;
+                        left: 220px;
                         position: absolute;
                         outline: none;
                         border: none;
@@ -108,29 +118,37 @@ body {
                         background: url('../image/搜索.png')no-repeat;
                         background-size: contain;
                     }
-                    .hot{
+                    .hot {
+                        width: 250px;
                         position: absolute;
-                       opacity: 0;
-                       
-                        top:44px;
-                        width: 100%;
+                        // transform: translateX(-1px);
+                        height: 0;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                        border-bottom: 1px maroon solid;
+                        border-left: 1px maroon solid;
+                        border-right: 1px maroon solid;
+                        //   border-top:none;
+                        top: 28px;
+                        // width: 249px;
                         background-color: #fff;
-                        li{
+                        // box-shadow: 5px 5px   20px #ccc;
+                        li {
                             cursor: pointer;
-                            padding-left: 5px;
+                            padding-left: 10px;
                             display: flex;
                             justify-content: space-between;
                             height: 30px;
                             line-height: 30px;
                             font-size: 12px;
-                            color:maroon;
-                            span{
-                                color:#999;
+                            color: maroon;
+                            span {
+                                color: #999;
                                 width: 150px;
                                 font-size: 12px;
                                 overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
                             }
                         }
                     }
@@ -139,6 +157,7 @@ body {
 
             table {
                 width: 900px;
+
                 thead {
                     tr {
                         th {
@@ -149,18 +168,22 @@ body {
                 }
 
                 tr {
-                    td {
-                        box-sizing: border-box;
-                    }
-
                     .songName {
                         p {
                             width: 400px;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
+                            margin: 0;
                         }
                     }
+
+                    td {
+                        height: 50px;
+                        padding: 0;
+                        vertical-align: middle;
+                    }
+
                     cursor: pointer;
                     color: #333;
                 }
@@ -175,10 +198,12 @@ body {
                 width: 100%;
                 text-align: center;
                 cursor: pointer;
-                a{
-                    border:1px solid maroon;
-                    color:maroon
+
+                a {
+                    border: 1px solid maroon;
+                    color: maroon
                 }
+
                 .myActive a {
                     background-color: maroon;
                     color: #fff
@@ -233,11 +258,13 @@ body {
                 border-radius: 50%;
                 box-shadow: 0 0 60px lightskyblue;
             }
-            .songName{
+
+            .songName {
                 margin-top: 10px;
                 font-size: 16px;
-                color:maroon;
+                color: maroon;
             }
+
             ul {
                 margin-top: 10px;
                 padding-bottom: 60px;
@@ -268,13 +295,19 @@ body {
 .bottomWrap {
     width: 100%;
     margin: 0 auto;
-    min-width: 1300px;
-    position: fixed;
+    background-color: #fff;
+    min-width: 1360px;
+    position: absolute;
     height: 60px;
     bottom: 0px;
 
     p {
-        width: 100%;
+        width: 900px;
+        left: 50%;
+        transform: translateX(-50%);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         top: 5px;
         color: maroon;
         font-size: 16px;
@@ -283,19 +316,44 @@ body {
     }
 
     .bottom {
-        width: 1300px;
+        width: 1360px;
         padding: 0 20px;
         margin: 0 auto;
         display: flex;
         height: 60px;
         background-color: #FFF;
         align-items: center;
-        .order{
+
+        .volumeImg {
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        .volume {
+            margin-left: 5px;
+            width: 100px;
+            height: 4px;
+            border-radius: 2px;
+            background-color: #ccc;
+
+            .ball {
+                transition: all 0.5s ease-in-out;
+                width: 50px;
+                height: 4px;
+                border-radius: 2px;
+                background-color: maroon;
+            }
+        }
+
+        .order {
             margin-left: 10px;
             cursor: pointer;
             width: 20px;
             height: 20px;
         }
+
         .cor {
             width: 120px;
             display: flex;
@@ -304,6 +362,7 @@ body {
             height: 60px;
 
             .cor_img {
+                cursor: pointer;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -314,7 +373,7 @@ body {
             }
 
             img {
-
+                cursor: pointer;
                 width: 20px;
                 height: 20px;
                 display: block;
@@ -334,10 +393,11 @@ body {
         .bar {
             height: 4px;
             border-radius: 2px;
-            width: 1000px;
+            width: 900px;
             background-color: lightslategrey;
 
             .play_time {
+                // transition:all 0.2s ease-in-out;
                 width: 0px;
                 background-color: maroon;
                 height: 4px;

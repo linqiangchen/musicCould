@@ -24,11 +24,7 @@ html,
 body {
   height: 100%;
   font-family: 'Microsoft Yahei';
-}
-
-::-webkit-scrollbar {
-  display: none;
-  /* Chrome Safari */
+  min-width: 1360px;
 }
 
 .box {
@@ -88,21 +84,28 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px maroon solid;
 }
 
 .box .wrap .left .tit .search input {
+  width: 249px;
   font-size: 14px;
   color: maroon;
-  padding: 4px 30px 4px 10px;
+  padding: 10px 30px 10px 10px;
+  border-radius: 5px 5px 0 0;
   outline: none;
   border: none;
+  border: 1px maroon solid;
+  border-bottom: none;
   width: 250px;
   height: 28px;
 }
 
+.box .wrap .left .tit .search input::placeholder {
+  color: #999;
+}
+
 .box .wrap .left .tit .search button {
-  left: 222px;
+  left: 220px;
   position: absolute;
   outline: none;
   border: none;
@@ -113,16 +116,21 @@ body {
 }
 
 .box .wrap .left .tit .search .hot {
+  width: 250px;
   position: absolute;
-  opacity: 0;
-  top: 44px;
-  width: 100%;
+  height: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-bottom: 1px maroon solid;
+  border-left: 1px maroon solid;
+  border-right: 1px maroon solid;
+  top: 28px;
   background-color: #fff;
 }
 
 .box .wrap .left .tit .search .hot li {
   cursor: pointer;
-  padding-left: 5px;
+  padding-left: 10px;
   display: flex;
   justify-content: space-between;
   height: 30px;
@@ -154,15 +162,18 @@ body {
   color: #333;
 }
 
-.box .wrap .left table tr td {
-  box-sizing: border-box;
-}
-
 .box .wrap .left table tr .songName p {
   width: 400px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin: 0;
+}
+
+.box .wrap .left table tr td {
+  height: 50px;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .box .wrap .left table .activeM {
@@ -262,14 +273,20 @@ body {
 .bottomWrap {
   width: 100%;
   margin: 0 auto;
-  min-width: 1300px;
-  position: fixed;
+  background-color: #fff;
+  min-width: 1360px;
+  position: absolute;
   height: 60px;
   bottom: 0px;
 }
 
 .bottomWrap p {
-  width: 100%;
+  width: 900px;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   top: 5px;
   color: maroon;
   font-size: 16px;
@@ -278,13 +295,36 @@ body {
 }
 
 .bottomWrap .bottom {
-  width: 1300px;
+  width: 1360px;
   padding: 0 20px;
   margin: 0 auto;
   display: flex;
   height: 60px;
   background-color: #FFF;
   align-items: center;
+}
+
+.bottomWrap .bottom .volumeImg {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.bottomWrap .bottom .volume {
+  margin-left: 5px;
+  width: 100px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #ccc;
+}
+
+.bottomWrap .bottom .volume .ball {
+  transition: all 0.5s ease-in-out;
+  width: 50px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: maroon;
 }
 
 .bottomWrap .bottom .order {
@@ -303,6 +343,7 @@ body {
 }
 
 .bottomWrap .bottom .cor .cor_img {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -313,6 +354,7 @@ body {
 }
 
 .bottomWrap .bottom .cor img {
+  cursor: pointer;
   width: 20px;
   height: 20px;
   display: block;
@@ -331,7 +373,7 @@ body {
 .bottomWrap .bottom .bar {
   height: 4px;
   border-radius: 2px;
-  width: 1000px;
+  width: 900px;
   background-color: lightslategrey;
 }
 
