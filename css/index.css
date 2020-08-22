@@ -182,6 +182,10 @@ body {
   text-align: center;
 }
 
+.box .wrap .left table thead {
+  vertical-align: middle;
+}
+
 .box .wrap .left table thead img {
   width: 30px;
   height: 30px;
@@ -193,6 +197,7 @@ body {
 }
 
 .box .wrap .left table thead tr th {
+  vertical-align: middle;
   text-align: center;
   background-color: #C62F2F;
   color: #fff;
@@ -221,10 +226,6 @@ body {
   height: 50px;
   padding: 0;
   vertical-align: middle;
-}
-
-.box .wrap .left table tbody .activeM {
-  color: maroon;
 }
 
 .box .wrap .left nav {

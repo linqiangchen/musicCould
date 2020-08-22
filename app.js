@@ -2,14 +2,7 @@ const express = require('express');
 const {
     createProxyMiddleware
 } = require('http-proxy-middleware');
-const {
-    songs,
-    songs1,
-    songs2,
-    songs3,
-    songs4,
-    songs5
-} = require('./js/data')
+
 const cors = require('cors');
 var app = express();
 app.use(express.static('../music'))

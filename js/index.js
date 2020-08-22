@@ -18,7 +18,7 @@ class Music {
         this.startTime = $('.time_') //音乐初始时间
         this.musicImg = $('.songs-img'); //歌曲海报
         this.loadList(), //加载歌曲列表
-        this.endTime = $('.time'); //歌曲结束时间
+            this.endTime = $('.time'); //歌曲结束时间
         this.timeBal = $('.play_time'); //歌曲播放进度条
         this.bar = $('.bar'); //进度条父元素
         this.dt = 0; //歌曲总时长
@@ -37,7 +37,8 @@ class Music {
         this.songName = $('.songName');
         this.isSearch = false;
         this.initSearch();
-        this.prevId = ''
+        this.prevId = '';
+        this.isList = false
 
     }
     toggleActive() { //切换播放歌曲列表样式
@@ -63,22 +64,26 @@ class Music {
         $('.tit i').click(function () { //全屏
             requestFullScreen();
         })
-        $('.update').click(function(){
-          
-          let _id =   prompt('请输入歌单id');
-          that.playListId = _id;
-          $.ajax({
-            type: 'get',
-            url: `${that.host}/playlist/detail?id=${that.playListId}`,
-            dataType: 'json',
-            success: (data) => {
-                that.musicId = data.playlist.trackIds.slice(0, 200).map(item => item.id)
-                that.offsetLoadPage()
-                let pageLi = ''
-                for (let i = 0; i < that.musicId.length / 10; i++) {
-                    pageLi += ` <li class="num"><a >${i+1}</a></li>`
-                }
-                that.offsetPage.html(`<li class="prevPage">
+        $('.update').click(function () {
+
+            let _id = prompt('请输入歌单id(登录网页版网易云，然后点击我的音乐，输入地址栏最后的数字)');
+            if(!_id.trim()){
+                // alert('请输入id')
+                return;
+            }
+            that.playListId = _id;
+            $.ajax({
+                type: 'get',
+                url: `${that.host}/playlist/detail?id=${that.playListId}`,
+                dataType: 'json',
+                success: (data) => {
+                    that.musicId = data.playlist.trackIds.slice(0, 200).map(item => item.id)
+                    that.offsetLoadPage()
+                    let pageLi = ''
+                    for (let i = 0; i < that.musicId.length / 10; i++) {
+                        pageLi += ` <li class="num"><a >${i+1}</a></li>`
+                    }
+                    that.offsetPage.html(`<li class="prevPage">
                 <a aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -89,34 +94,41 @@ class Music {
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>`)
-              that.isId = true;
-                that.num = $('.num');
-                that.num.eq(0).addClass('myActive');
-                localStorage.setItem('playListId',_id);
-                $('.my').attr('_id',_id)
-            },
-            error:function(){
-                alert('无效id')
-            }
-        })
+                    that.isId = true;
+                    that.num = $('.num');
+                    that.num.eq(0).addClass('myActive');
+                    localStorage.setItem('playListId', _id);
+                    $('.my').attr('_id', _id)
+                },
+                error: function () {
+                    alert('无效id')
+                }
+            })
         })
         document.onscroll = function (e) { //计算控制条位置
             $('.bottomWrap').css('transform', `translateY(${document.documentElement.scrollTop}px)`)
         }
         $('tbody').on('click', 'tr', function () { //点击歌曲播放
             that.initBar() //初始化控制条
+            that.isList = false;
+            that.nextMusicId = [];
+            $('.nextPlayUl').html('')
             that.Index = $(this).index('tbody tr') + (that.page - 1) * 10; //切换当前播放歌曲索引
-            that.pauseMusic()
+            that.pauseMusic();
             that.toggleActive()
             that.toggleMusic()
         })
         $('tbody').on('click', '.add', function () { //点击歌曲播放
-          that.nextMusicId.unshift({id:$(this).parent().attr('_id'),name:$(this).parent().find('.songName p').text()})
-          $('.nextPlayUl').append(`<li>${$(this).parent().find('.songName p').text()}</li>`)
-          $(this).addClass('nextPlay')
-          console.log('that.nextMusicId: ', that.nextMusicId);
+            that.nextMusicId.unshift({
+                id: $(this).parent().attr('_id'),
+                name: $(this).parent().find('.songName p').text()
+            });
+            that.isList = true;
+            $('.nextPlayUl').append(`<li>${$(this).parent().find('.songName p').text()}</li>`)
+            $(this).addClass('nextPlay')
+            
 
-          return false;
+            return false;
         })
         $('.hot').on('click', 'li', function (e) { //点击热搜搜索
             that.inpSearch.val($(this).attr('keyword'))
@@ -189,7 +201,7 @@ class Music {
             $(this).addClass('playlist')
         })
         this.next.click(function () { //下一首
-            if(that.nextMusicId.length === 0){
+            if (!that.isList) {
                 if (that.Index === that.musicId.length - 1) {
                     return;
                 }
@@ -208,12 +220,12 @@ class Music {
                     that.Index = 0
                 }
                 that.toggleMusic() //切换播放歌曲
-            }else{
-                that.Index = that.nextMusicId.length-1;
+            } else {
+                that.Index = that.nextMusicId.length - 1;
                 that.toggleMusic()
                 $('.nextPlayUl li:first-child').remove()
             }
-            
+
         })
         this.prev.click(function () { //下一首
             if (that.Index === 0) {
@@ -233,7 +245,7 @@ class Music {
         })
         this.music.onended = function () { //播放结束播放下一首
             that.initBar() //初始化控制条
-            if(that.nextMusicId.length === 0){
+            if (that.nextMusicId.length === 0) {
                 if (that.playOrder) {
                     that.randomMusic()
                 } else {
@@ -248,14 +260,14 @@ class Music {
                 }
                 that.toggleActive();
                 that.toggleMusic() //切换播放歌曲
-            }else{
-                
-                    that.Index = that.nextMusicId.length-1;
-                    that.toggleMusic()
-                    $('.nextPlayUl li:first-child').remove()
-                
+            } else {
+
+                that.Index = that.nextMusicId.length - 1;
+                that.toggleMusic()
+                $('.nextPlayUl li:first-child').remove()
+
             }
-            
+
         }
         this.bar.click(function (e) { //点击进度条快进
             if (!that.isPlay) { //判断播放状态
@@ -373,18 +385,22 @@ class Music {
     }
     toggleMusic() { //切换播放歌曲
         let id = ''
-        if(this.nextMusicId.length === 0){
-            id = this.musicId[this.Index]
-        }else{
+        
+        if (this.isList) {
             id = this.nextMusicId[this.Index].id;
             this.nextMusicId.pop();
+            if(this.nextMusicId.length === 0){
+                this.isList = false
+            } 
+        } else {
+            id = this.musicId[this.Index]
         }
-            this.loadMusic(id);
+        this.loadMusic(id);
         this.loadSongs(id);
         this.loadLyric(id);
         this.loadComment(id);
-     
-        
+
+
         this.lyric = "";
         $('.show_lyric').text('')
         this.currLyric = 0;
@@ -448,7 +464,7 @@ class Music {
             }
         })
     }
-    loadNextPlay(){
+    loadNextPlay() {
         let li = ''
         this.nextMusicId.forEach(item => {
             li += `<li>${item.name}</li>`
@@ -474,7 +490,7 @@ class Music {
         // this.playListId = 523519208
         let Index = localStorage.getItem('playListId');
         this.playListId = Index || 523519208;
-        
+
         $.ajax({
             type: 'get',
             url: `${this.host}/playlist/detail?id=${this.playListId}`,
@@ -499,12 +515,12 @@ class Music {
               </li>`)
                 this.num = $('.num')
                 this.num.eq(0).addClass('myActive');
-                if(localStorage.getItem('musicId')){
+                if (localStorage.getItem('musicId')) {
                     this.updateTable(localStorage.getItem('musicId'), localStorage.getItem('dt'));
-                }else{
+                } else {
                     this.updateTable(data.playlist.tracks[0].id, data.playlist.tracks[0].dt);
                 }
-                
+
             }
         })
     }
@@ -558,12 +574,12 @@ class Music {
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>`)
-              this.isId = true;
+                this.isId = true;
                 this.num = $('.num');
                 this.num.eq(0).addClass('myActive');
-                
+
             },
-            error:function(){
+            error: function () {
                 alert('无效id')
             }
         })
@@ -639,9 +655,9 @@ class Music {
         this.music.play();
         this.isPlay = true;
         this.prevId = this.musicId[this.Index];
-        
-        localStorage.setItem('musicId',this.prevId)
-        localStorage.setItem('dt',this.dt)
+
+        localStorage.setItem('musicId', this.prevId)
+        localStorage.setItem('dt', this.dt)
         // localStorage.getItem('musicId')
         // 
         this.musicImg.addClass('ani')
@@ -691,6 +707,7 @@ class Music {
     }
 }
 let music = new Music()
+
 function createLrcObj(lrc) {
     var oLRC = {
         ti: "", //歌曲名
@@ -734,6 +751,7 @@ function createLrcObj(lrc) {
     });
     return oLRC
 }
+
 function requestFullScreen() {
     var de = document.documentElement;
     if (de.requestFullscreen) {

@@ -184,6 +184,7 @@ body {
                 width: 900px;
                 text-align: center;
                 thead {
+                    vertical-align: middle;
                     img{
                        
                         width: 30px;
@@ -193,6 +194,7 @@ body {
                     tr {
                         text-align: center;
                         th {
+                            vertical-align: middle;
                             text-align: center;
                             background-color: #C62F2F;
                             color: #fff;
@@ -228,7 +230,7 @@ body {
                     }
     
                     .activeM {
-                        color: maroon;
+                        // color: maroon;
     
                     }
                 }
