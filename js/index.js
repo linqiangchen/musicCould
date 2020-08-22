@@ -535,11 +535,11 @@ class Music {
                 let div = '';
                 res.forEach((item, index) => {
                     div += `<tr _id=${item.id}>
-                        <td>${(this.page - 1)*10+index+1}</td>
-                        <td class="songName"><p>${item.name}</p></td>
-                    <td>${this.min(item.dt)}</td>
-                    <td>${item.ar[0].name}</td>
-                    <td class="add"><img src="./image/add.png" alt=""></td>
+                        <td class="table-1">${(this.page - 1)*10+index+1}</td>
+                        <td class="songName table-2"><p>${item.name}</p></td>
+                    <td class="table-3">${this.min(item.dt)}</td>
+                    <td class="table-4">${item.ar[0].name}</td>
+                    <td class="add table-5"><img src="./image/add.png" alt=""></td>
                 </tr>`
                 })
                 $('tbody').html(div);

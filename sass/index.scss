@@ -25,27 +25,30 @@ li {
 
 @keyframes add {
     0% {
-       transform:scale(1)
+        transform: scale(1)
     }
 
     50% {
-        transform:scale(2);
+        transform: scale(2);
         color: maroon;
     }
 
     100% {
-        transform:scale(1)
+        transform: scale(1)
     }
 }
+
 html,
 body {
     height: 100%;
     font-family: 'Microsoft Yahei';
     min-width: 1360px;
 }
-.nextPlay{
+
+.nextPlay {
     animation: add 0.5s;
 }
+
 // ::-webkit-scrollbar {
 //     display: none; /* Chrome Safari */
 //   }
@@ -87,11 +90,13 @@ body {
                     height: 60px;
 
                 }
-                .setting{
+
+                .setting {
                     width: 30px;
                     height: 30px;
                     display: block;
                 }
+
                 .playlist {
                     border-bottom: 4px solid maroon;
                 }
@@ -102,7 +107,8 @@ body {
                     font-size: 16px;
                     color: maroon;
                     line-height: 60px;
-                    img{
+
+                    img {
                         width: 20px;
                         height: 20px;
                         display: block;
@@ -115,6 +121,7 @@ body {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+
                     input {
                         width: 249px;
                         font-size: 14px;
@@ -130,9 +137,11 @@ body {
                         width: 250px;
                         height: 28px;
                     }
+
                     input::placeholder {
                         color: #999;
                     }
+
                     button {
                         left: 220px;
                         position: absolute;
@@ -143,6 +152,7 @@ body {
                         background: url('../image/搜索.png')no-repeat;
                         background-size: contain;
                     }
+
                     .hot {
                         width: 250px;
                         position: absolute;
@@ -157,6 +167,7 @@ body {
                         top: 28px;
                         // width: 249px;
                         background-color: #fff;
+
                         // box-shadow: 5px 5px   20px #ccc;
                         li {
                             cursor: pointer;
@@ -167,6 +178,7 @@ body {
                             line-height: 30px;
                             font-size: 12px;
                             color: maroon;
+
                             span {
                                 color: #999;
                                 width: 150px;
@@ -183,17 +195,43 @@ body {
             table {
                 width: 900px;
                 text-align: center;
-                thead {
+                td {
+                    text-align: center;
+                    height: 50px;
+                    padding: 0;
                     vertical-align: middle;
-                    img{
-                       
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .table-1 {
+                    padding: 8px 0;
+                    width: 80px !important;
+                }
+
+                .table-2 {
+                    width: 400px;
+                }
+
+                .table-3 {
+                    width: 80px;
+                }
+                .table-4 {
+                    width: 260px;
+                }
+                .table-5 {
+                    width: 80px;
+                }
+                thead {
+                    img {
                         width: 30px;
                         height: 30px;
                         display: inline-block;
                     }
                     tr {
-                        text-align: center;
                         th {
+                            // width: 80px;
                             vertical-align: middle;
                             text-align: center;
                             background-color: #C62F2F;
@@ -201,40 +239,30 @@ body {
                         }
                     }
                 }
-                tbody{
+                tbody {
                     tr {
-                        img{
+                        img {
                             width: 20px;
                             height: 20px;
                             display: inline-block;
                         }
                         .songName {
                             p {
-                                text-align: center;
-                                // width: 400px;
+
+                                width: 400px;
+                                margin: 0;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                margin: 0;
                             }
                         }
-    
-                        td {
-                            height: 50px;
-                            padding: 0;
-                            vertical-align: middle;
-                        }
-    
                         cursor: pointer;
                         color: #333;
                     }
-    
                     .activeM {
                         // color: maroon;
-    
                     }
                 }
-                
             }
 
             nav {
@@ -397,21 +425,25 @@ body {
             width: 20px;
             height: 20px;
         }
-        ._next{
+
+        ._next {
             margin-left: 8px;
             width: 25px;
             height: 25px;
             display: block;
         }
-        ._next:hover+.nextPlayUl{
+
+        ._next:hover+.nextPlayUl {
             display: block;
         }
-        .nextPlayUl{
+
+        .nextPlayUl {
             display: none;
             position: absolute;
             right: -40px;
-            bottom:35px;
-            li{
+            bottom: 35px;
+
+            li {
                 width: 100px;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -421,6 +453,7 @@ body {
                 color: #999;
             }
         }
+
         .cor {
             width: 120px;
             display: flex;

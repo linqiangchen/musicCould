@@ -182,18 +182,41 @@ body {
   text-align: center;
 }
 
-.box .wrap .left table thead {
+.box .wrap .left table td {
+  text-align: center;
+  height: 50px;
+  padding: 0;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.box .wrap .left table .table-1 {
+  padding: 8px 0;
+  width: 80px !important;
+}
+
+.box .wrap .left table .table-2 {
+  width: 400px;
+}
+
+.box .wrap .left table .table-3 {
+  width: 80px;
+}
+
+.box .wrap .left table .table-4 {
+  width: 260px;
+}
+
+.box .wrap .left table .table-5 {
+  width: 80px;
 }
 
 .box .wrap .left table thead img {
   width: 30px;
   height: 30px;
   display: inline-block;
-}
-
-.box .wrap .left table thead tr {
-  text-align: center;
 }
 
 .box .wrap .left table thead tr th {
@@ -215,17 +238,11 @@ body {
 }
 
 .box .wrap .left table tbody tr .songName p {
-  text-align: center;
+  width: 400px;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0;
-}
-
-.box .wrap .left table tbody tr td {
-  height: 50px;
-  padding: 0;
-  vertical-align: middle;
 }
 
 .box .wrap .left nav {
