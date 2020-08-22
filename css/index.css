@@ -20,11 +20,28 @@ li {
   }
 }
 
+@keyframes add {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(2);
+    color: maroon;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 html,
 body {
   height: 100%;
   font-family: 'Microsoft Yahei';
   min-width: 1360px;
+}
+
+.nextPlay {
+  animation: add 0.5s;
 }
 
 .box {
@@ -66,6 +83,12 @@ body {
   height: 60px;
 }
 
+.box .wrap .left .tit .setting {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
 .box .wrap .left .tit .playlist {
   border-bottom: 4px solid maroon;
 }
@@ -76,6 +99,12 @@ body {
   font-size: 16px;
   color: maroon;
   line-height: 60px;
+}
+
+.box .wrap .left .tit i img {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .box .wrap .left .tit .search {
@@ -150,33 +179,51 @@ body {
 
 .box .wrap .left table {
   width: 900px;
+  text-align: center;
+}
+
+.box .wrap .left table thead img {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+}
+
+.box .wrap .left table thead tr {
+  text-align: center;
 }
 
 .box .wrap .left table thead tr th {
+  text-align: center;
   background-color: #C62F2F;
   color: #fff;
 }
 
-.box .wrap .left table tr {
+.box .wrap .left table tbody tr {
   cursor: pointer;
   color: #333;
 }
 
-.box .wrap .left table tr .songName p {
-  width: 400px;
+.box .wrap .left table tbody tr img {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.box .wrap .left table tbody tr .songName p {
+  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0;
 }
 
-.box .wrap .left table tr td {
+.box .wrap .left table tbody tr td {
   height: 50px;
   padding: 0;
   vertical-align: middle;
 }
 
-.box .wrap .left table .activeM {
+.box .wrap .left table tbody .activeM {
   color: maroon;
 }
 
@@ -295,6 +342,7 @@ body {
 }
 
 .bottomWrap .bottom {
+  position: relative;
   width: 1360px;
   padding: 0 20px;
   margin: 0 auto;
@@ -332,6 +380,34 @@ body {
   cursor: pointer;
   width: 20px;
   height: 20px;
+}
+
+.bottomWrap .bottom ._next {
+  margin-left: 8px;
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+.bottomWrap .bottom ._next:hover + .nextPlayUl {
+  display: block;
+}
+
+.bottomWrap .bottom .nextPlayUl {
+  display: none;
+  position: absolute;
+  right: -40px;
+  bottom: 35px;
+}
+
+.bottomWrap .bottom .nextPlayUl li {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 0;
+  font-size: 12px;
+  color: #999;
 }
 
 .bottomWrap .bottom .cor {

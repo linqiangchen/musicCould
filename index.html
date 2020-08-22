@@ -19,15 +19,14 @@
         <div class="wrap">
             <div class="left">
                 <div class="tit">
-
-                    <span _id='19723756'>飙升榜</span>
-
-                    <span _id='3779629'>新歌榜</span>
-
-                    <span _id='2884035'>原创</span>
-                    <span _id='3778678'>热歌榜</span>
-                    <span _id='0' class="my playlist">我的歌单</span>
-                    <i>全屏</i>
+                    <span _id='19723756' class="ply">飙升榜</span>
+                    <span _id='3779629' class="ply">新歌榜</span>
+                    <span _id='2884035' class="ply">原创</span>
+                    <span _id='3778678' class="ply">热歌榜</span>
+                    <span _id='523519208' class="my playlist ply">我的歌单</span>
+                    <span class="update">修改歌单</span>
+                    <!-- <img src="./image/设置.png" alt="" class="setting"> -->
+                    <i><img src="./image/全屏.png" alt=""></i>
                     <div class="search">
                         <input type="text" placeholder="输入歌曲或歌手">
                         <button class="btn">
@@ -44,6 +43,7 @@
                             <th>歌曲标题</th>
                             <th>时长</th>
                             <th>歌手</th>
+                            <th><img src="./image/下一首播放.png" alt=""></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,8 +107,12 @@
            <div class="volume">
                <div class="ball"></div>
            </div>
-           
             <img src="./image/0.png" alt="" class="order" title="顺序播放">
+            <img src="./image/列表.png" alt="" title="下一首播放列表" class="_next">
+            <ul class="nextPlayUl">
+                <!-- <li>英雄联盟</li> -->
+                
+            </ul>
         </div>
         <p class="show_lyric">暂无歌词</p>
     </div>

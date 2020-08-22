@@ -23,13 +23,29 @@ li {
     }
 }
 
+@keyframes add {
+    0% {
+       transform:scale(1)
+    }
+
+    50% {
+        transform:scale(2);
+        color: maroon;
+    }
+
+    100% {
+        transform:scale(1)
+    }
+}
 html,
 body {
     height: 100%;
     font-family: 'Microsoft Yahei';
     min-width: 1360px;
 }
-
+.nextPlay{
+    animation: add 0.5s;
+}
 // ::-webkit-scrollbar {
 //     display: none; /* Chrome Safari */
 //   }
@@ -71,7 +87,11 @@ body {
                     height: 60px;
 
                 }
-
+                .setting{
+                    width: 30px;
+                    height: 30px;
+                    display: block;
+                }
                 .playlist {
                     border-bottom: 4px solid maroon;
                 }
@@ -82,6 +102,11 @@ body {
                     font-size: 16px;
                     color: maroon;
                     line-height: 60px;
+                    img{
+                        width: 20px;
+                        height: 20px;
+                        display: block;
+                    }
                 }
 
                 .search {
@@ -157,41 +182,57 @@ body {
 
             table {
                 width: 900px;
-
+                text-align: center;
                 thead {
+                    img{
+                       
+                        width: 30px;
+                        height: 30px;
+                        display: inline-block;
+                    }
                     tr {
+                        text-align: center;
                         th {
+                            text-align: center;
                             background-color: #C62F2F;
                             color: #fff;
                         }
                     }
                 }
-
-                tr {
-                    .songName {
-                        p {
-                            width: 400px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            margin: 0;
+                tbody{
+                    tr {
+                        img{
+                            width: 20px;
+                            height: 20px;
+                            display: inline-block;
                         }
+                        .songName {
+                            p {
+                                text-align: center;
+                                // width: 400px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                margin: 0;
+                            }
+                        }
+    
+                        td {
+                            height: 50px;
+                            padding: 0;
+                            vertical-align: middle;
+                        }
+    
+                        cursor: pointer;
+                        color: #333;
                     }
-
-                    td {
-                        height: 50px;
-                        padding: 0;
-                        vertical-align: middle;
+    
+                    .activeM {
+                        color: maroon;
+    
                     }
-
-                    cursor: pointer;
-                    color: #333;
                 }
-
-                .activeM {
-                    color: maroon;
-
-                }
+                
             }
 
             nav {
@@ -316,6 +357,7 @@ body {
     }
 
     .bottom {
+        position: relative;
         width: 1360px;
         padding: 0 20px;
         margin: 0 auto;
@@ -353,7 +395,30 @@ body {
             width: 20px;
             height: 20px;
         }
-
+        ._next{
+            margin-left: 8px;
+            width: 25px;
+            height: 25px;
+            display: block;
+        }
+        ._next:hover+.nextPlayUl{
+            display: block;
+        }
+        .nextPlayUl{
+            display: none;
+            position: absolute;
+            right: -40px;
+            bottom:35px;
+            li{
+                width: 100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: 2px 0;
+                font-size: 12px;
+                color: #999;
+            }
+        }
         .cor {
             width: 120px;
             display: flex;
