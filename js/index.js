@@ -18,7 +18,7 @@ class Music {
         this.startTime = $('.time_') //音乐初始时间
         this.musicImg = $('.songs-img'); //歌曲海报
         this.loadList(), //加载歌曲列表
-            this.endTime = $('.time'); //歌曲结束时间
+        this.endTime = $('.time'); //歌曲结束时间
         this.timeBal = $('.play_time'); //歌曲播放进度条
         this.bar = $('.bar'); //进度条父元素
         this.dt = 0; //歌曲总时长
@@ -38,12 +38,16 @@ class Music {
         this.isSearch = false;
         this.initSearch();
         this.prevId = '';
+        this.curId = '';
         this.isList = false
 
     }
-    toggleActive() { //切换播放歌曲列表样式
-        $('tbody tr').removeClass('activeM');
-        $('tbody tr').eq(this.Index % 10).addClass('activeM')
+    toggleActive(){
+      let active =  [...$('tbody tr')].filter(item => $(item).attr('_id') == this.curId)
+     if(active){
+        $('tbody tr').removeClass('activeMusic')
+         $(active).addClass('activeMusic')
+     }
     }
     loadRight(id) { //加载歌曲海报
         $.ajax({
@@ -115,7 +119,6 @@ class Music {
             $('.nextPlayUl').html('')
             that.Index = $(this).index('tbody tr') + (that.page - 1) * 10; //切换当前播放歌曲索引
             that.pauseMusic();
-            that.toggleActive()
             that.toggleMusic()
         })
         $('tbody').on('click', '.add', function () { //点击歌曲播放
@@ -126,8 +129,6 @@ class Music {
             that.isList = true;
             $('.nextPlayUl').append(`<li>${$(this).parent().find('.songName p').text()}</li>`)
             $(this).addClass('nextPlay')
-            
-
             return false;
         })
         $('.hot').on('click', 'li', function (e) { //点击热搜搜索
@@ -158,17 +159,20 @@ class Music {
         })
         this.order.click(function () { //切换播放顺序
             that.playOrder++;
-            that.playOrder %= 2;
+            that.playOrder %= 3;
             $(this).attr('src', `./image/${that.playOrder}.png`)
-            if (that.playOrder) {
+            if (that.playOrder == 1) {
                 $(this).attr('title', `随机播放`)
-            } else {
+            } else if(that.playOrder == 1) {
+                $(this).attr('title', `顺序播放`)
+            }else{
                 $(this).attr('title', `顺序播放`)
             }
         })
         this.offsetPage.on('click', '.num', function () { //点击页数跳转列表
             that.page = $(this).index('.num') + 1;
             that.offsetLoadPage();
+        
         })
         this.offsetPage.on('click', '.prevPage', function () { //分页--上一页
             that.page -= 1;
@@ -176,6 +180,7 @@ class Music {
                 that.page = that.num.length
             }
             that.offsetLoadPage();
+          
         })
         this.offsetPage.on('click', '.nextPage', function () { //分页--下一页
             that.page += 1;
@@ -183,6 +188,7 @@ class Music {
                 that.page = 1
             }
             that.offsetLoadPage();
+            
         })
         this.$play.click(() => { //播放与暂停
             if (this.isPlay) {
@@ -215,7 +221,7 @@ class Music {
                     that.page++;
                     that.offsetLoadPage() //切换播放歌曲
                 }
-                that.toggleActive()
+
                 if (that.Index > that.musicId.length) {
                     that.Index = 0
                 }
@@ -237,7 +243,7 @@ class Music {
                 that.page--;
                 that.offsetLoadPage() //切换播放歌曲
             }
-            that.toggleActive()
+
             if (that.Index < 0) {
                 that.Index = that.musicId.length - 1
             }
@@ -245,12 +251,13 @@ class Music {
         })
         this.music.onended = function () { //播放结束播放下一首
             that.initBar() //初始化控制条
+            console.log(that.playOrder)
             if (that.nextMusicId.length === 0) {
-                if (that.playOrder) {
+                if (that.playOrder == 1) {
                     that.randomMusic()
-                } else {
+                } else if(that.playOrder == 0) {
                     that.Index++;
-                }
+                } 
                 if (that.Index > that.musicId.length) {
                     that.Index = 0
                 }
@@ -258,7 +265,7 @@ class Music {
                     that.page++;
                     that.offsetLoadPage(); //切换播放歌曲
                 }
-                that.toggleActive();
+
                 that.toggleMusic() //切换播放歌曲
             } else {
 
@@ -385,7 +392,6 @@ class Music {
     }
     toggleMusic() { //切换播放歌曲
         let id = ''
-        
         if (this.isList) {
             id = this.nextMusicId[this.Index].id;
             this.nextMusicId.pop();
@@ -399,14 +405,12 @@ class Music {
         this.loadSongs(id);
         this.loadLyric(id);
         this.loadComment(id);
-
-
         this.lyric = "";
         $('.show_lyric').text('')
         this.currLyric = 0;
         this.prevLyric = 0;
         this.playPage = this.page;
-        this.toggleActive()
+
     }
     loadCor(id, dt) { //加载进度条
         $.ajax({
@@ -429,12 +433,16 @@ class Music {
             url: `${this.host}/song/url?id=${id}`,
             dataType: 'json',
             success: (data) => {
+            // let active =  [...$('tbody tr')].filter(item.attr('_id') == this.prevId);
+            // console.log(active)
                 if (!data.data[0].url) {
                     this.Index += 1;
                     this.toggleMusic();
                     return;
                 } else {
                     $(this.music).attr('src', data.data[0].url);
+                    this.curId = id;
+                    this.toggleActive()
                     setTimeout(() => {
                         this.playMusic();
                     }, 150)
@@ -442,6 +450,7 @@ class Music {
             }
         })
     }
+
     loadComment(id) { //加载热评
         $.ajax({
             type: 'get',
@@ -543,11 +552,9 @@ class Music {
                 </tr>`
                 })
                 $('tbody').html(div);
+                this.toggleActive()
                 this.num.removeClass('myActive')
                 this.num.eq(this.page - 1).addClass('myActive');
-                if (this.page === this.playPage) {
-                    this.toggleActive()
-                }
             }
         })
     }
