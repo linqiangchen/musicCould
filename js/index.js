@@ -39,7 +39,7 @@ class Music {
         this.initSearch();
         this.prevId = '';
         this.curId = '';
-        this.isList = false
+        this.isList = false;
 
     }
     toggleActive(){
@@ -118,6 +118,7 @@ class Music {
             that.nextMusicId = [];
             $('.nextPlayUl').html('')
             that.Index = $(this).index('tbody tr') + (that.page - 1) * 10; //切换当前播放歌曲索引
+            $('.musicImg').removeClass('ani')
             that.pauseMusic();
             that.toggleMusic()
         })
@@ -207,6 +208,7 @@ class Music {
             $(this).addClass('playlist')
         })
         this.next.click(function () { //下一首
+            $('.musicImg').removeClass('ani')
             if (!that.isList) {
                 if (that.Index === that.musicId.length - 1) {
                     return;
@@ -234,6 +236,7 @@ class Music {
 
         })
         this.prev.click(function () { //下一首
+            $('.musicImg').removeClass('ani')
             if (that.Index === 0) {
                 return
             }
@@ -250,6 +253,7 @@ class Music {
             that.toggleMusic() //切换播放歌曲
         })
         this.music.onended = function () { //播放结束播放下一首
+            $('.musicImg').removeClass('ani')
             that.initBar() //初始化控制条
             console.log(that.playOrder)
             if (that.nextMusicId.length === 0) {
@@ -450,7 +454,6 @@ class Music {
             }
         })
     }
-
     loadComment(id) { //加载热评
         $.ajax({
             type: 'get',
@@ -662,19 +665,30 @@ class Music {
         this.music.play();
         this.isPlay = true;
         this.prevId = this.musicId[this.Index];
-
         localStorage.setItem('musicId', this.prevId)
         localStorage.setItem('dt', this.dt)
         // localStorage.getItem('musicId')
         // 
-        this.musicImg.addClass('ani')
+        $('.musicImg').addClass('ani')
+        $('.musicImg span').css({
+            'animation-play-state': 'running'
+       })
+        this.musicImg.css({
+            'animation-play-state': 'running'
+       })
         this.$play.attr('src', './image/暂停.png');
         this.moveBar()
     }
     pauseMusic() { //暂停歌曲
         this.music.pause();
         this.isPlay = false;
-        this.musicImg.removeClass('ani')
+        // this.musicImg.removeClass('ani')
+        $('.musicImg span').css({
+            'animation-play-state': 'paused'
+       })
+        this.musicImg.css({
+             'animation-play-state': 'paused'
+        })
         this.$play.attr('src', './image/播放.png')
         clearInterval(this.timer)
     }
@@ -712,6 +726,7 @@ class Music {
             });
         }, 120000)
     }
+    //历史播放
 }
 let music = new Music()
 

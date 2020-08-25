@@ -25,19 +25,30 @@ li {
 
 @keyframes add {
     0% {
-        transform: scale(1)
+        transform: scale(1);
+        color: #333;
     }
-
     50% {
         transform: scale(2);
         color: maroon;
     }
-
     100% {
-        transform: scale(1)
+        transform: scale(1);
+        color: #333;
     }
 }
-
+@keyframes music {
+    0% {
+        border:1px lightskyblue solid;
+        transform:scale(1);
+        opacity: 1;
+    }
+    100% {
+        border:1px lightskyblue solid;
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
 html,
 body {
     height: 100%;
@@ -248,7 +259,6 @@ body {
                         }
                         .songName {
                             p {
-
                                 width: 400px;
                                 margin: 0;
                                 overflow: hidden;
@@ -325,14 +335,49 @@ body {
             width: 400px;
             margin-bottom: 60px;
             text-align: center;
-
-            img {
+            .musicImg{
                 width: 200px;
                 height: 200px;
-                border-radius: 50%;
-                box-shadow: 0 0 60px lightskyblue;
+                margin: 0 auto;
+                position: relative;
+                // border:1px maroon solid;
+                margin-bottom: 40px;
+                img {
+                    top: 0;
+                    left: 0;
+                    position: absolute;
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 50%;
+                    // box-shadow: 0 0 10px  lightskyblue , 0 0 20px  lightskyblue , 0 0 30px  lightskyblue;
+                }
+                span{
+                    top: 0;
+                    left: 0;
+                    position: absolute;
+                    width: 198px;
+                    height: 198px;
+                    // border:1px maroon solid;
+                    border-radius: 50%;
+                }
+    
             }
-
+            .ani span:nth-child(2){
+                // background-color: red;
+                animation: music 3s linear infinite 0s;
+            }
+            .ani span:nth-child(3){
+                // background-color: red;
+                animation: music 3s   linear infinite 1s;
+            }
+            .ani span:nth-child(4){
+                // background-color: red;
+                animation: music 3s  linear infinite 2s;
+            }
+            .ani img{
+                animation: changeright 30s linear infinite  ;
+            }
+           
             .songName {
                 margin-top: 10px;
                 font-size: 16px;
@@ -343,7 +388,7 @@ body {
                 margin-top: 10px;
                 padding-bottom: 60px;
                 margin-bottom: 40px;
-
+                   
                 li {
                     cursor: pointer;
                     margin-bottom: 10px;
@@ -356,10 +401,11 @@ body {
                 }
             }
 
-            .ani {
+            // .ani {
 
-                animation: changeright 30s linear infinite
-            }
+               
+            //     // animation-fill-mode:none;
+            // }
 
         }
 

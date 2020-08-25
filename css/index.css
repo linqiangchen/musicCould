@@ -23,6 +23,7 @@ li {
 @keyframes add {
   0% {
     transform: scale(1);
+    color: #333;
   }
   50% {
     transform: scale(2);
@@ -30,6 +31,20 @@ li {
   }
   100% {
     transform: scale(1);
+    color: #333;
+  }
+}
+
+@keyframes music {
+  0% {
+    border: 1px lightskyblue solid;
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    border: 1px lightskyblue solid;
+    transform: scale(1.5);
+    opacity: 0;
   }
 }
 
@@ -305,11 +320,46 @@ body {
   text-align: center;
 }
 
-.box .wrap .right img {
+.box .wrap .right .musicImg {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.box .wrap .right .musicImg img {
+  top: 0;
+  left: 0;
+  position: absolute;
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  box-shadow: 0 0 60px lightskyblue;
+}
+
+.box .wrap .right .musicImg span {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 198px;
+  height: 198px;
+  border-radius: 50%;
+}
+
+.box .wrap .right .ani span:nth-child(2) {
+  animation: music 3s linear infinite 0s;
+}
+
+.box .wrap .right .ani span:nth-child(3) {
+  animation: music 3s   linear infinite 1s;
+}
+
+.box .wrap .right .ani span:nth-child(4) {
+  animation: music 3s  linear infinite 2s;
+}
+
+.box .wrap .right .ani img {
+  animation: changeright 30s linear infinite;
 }
 
 .box .wrap .right .songName {
@@ -333,10 +383,6 @@ body {
 
 .box .wrap .right ul .lyricActive {
   color: maroon;
-}
-
-.box .wrap .right .ani {
-  animation: changeright 30s linear infinite;
 }
 
 .bottomWrap {
