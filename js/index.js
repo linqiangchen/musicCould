@@ -17,7 +17,8 @@ class Music {
         this.curTime = 0; //当前歌曲时间
         this.startTime = $('.time_') //音乐初始时间
         this.musicImg = $('.songs-img'); //歌曲海报
-        this.loadList(), //加载歌曲列表
+        this.loadAllPlayList();
+        // this.loadList(), //加载歌曲列表
         this.endTime = $('.time'); //歌曲结束时间
         this.timeBal = $('.play_time'); //歌曲播放进度条
         this.bar = $('.bar'); //进度条父元素
@@ -41,13 +42,14 @@ class Music {
         this.curId = '';
         this.isList = false;
 
+        this.uid = '';
     }
-    toggleActive(){
-      let active =  [...$('tbody tr')].filter(item => $(item).attr('_id') == this.curId)
-     if(active){
-        $('tbody tr').removeClass('activeMusic')
-         $(active).addClass('activeMusic')
-     }
+    toggleActive() {
+        let active = [...$('tbody tr')].filter(item => $(item).attr('_id') == this.curId)
+        if (active) {
+            $('tbody tr').removeClass('activeMusic')
+            $(active).addClass('activeMusic')
+        }
     }
     loadRight(id) { //加载歌曲海报
         $.ajax({
@@ -71,7 +73,7 @@ class Music {
         $('.update').click(function () {
 
             let _id = prompt('请输入歌单id(登录网页版网易云，然后点击我的音乐，输入地址栏最后的数字)');
-            if(!_id.trim()){
+            if (!_id.trim()) {
                 // alert('请输入id')
                 return;
             }
@@ -101,7 +103,7 @@ class Music {
                     that.isId = true;
                     that.num = $('.num');
                     that.num.eq(0).addClass('myActive');
-                    localStorage.setItem('playListId', _id);
+                    // localStorage.setItem('playListId', _id);
                     $('.my').attr('_id', _id)
                 },
                 error: function () {
@@ -138,6 +140,24 @@ class Music {
             that.searchSong()
             return false;
         })
+        $('.list').on('click', 'li', function (e) { //点击热搜搜索
+            if (e.target.className === 'updateUser') {
+                let uid = prompt("请输入自己的网易云id获取自己的歌单");
+                if (!isNaN(uid)) {
+                    this.uid = uid;
+                    localStorage.setItem('uid', uid);
+                    that.loadAllPlayList();
+                    
+                    that.loadList()
+                } else {
+                    //  
+                    localStorage.setItem('uid', '370540934');
+                }
+            } else {
+                that.loadPlayList($(this).attr('playlistId'))
+            }
+            return false;
+        })
         that.inpSearch.focus(function () { //控制热搜隐藏于显示
             $('.hot').css('transition', '0.2s')
             $('.hot').css('height', '450px')
@@ -164,16 +184,16 @@ class Music {
             $(this).attr('src', `./image/${that.playOrder}.png`)
             if (that.playOrder == 1) {
                 $(this).attr('title', `随机播放`)
-            } else if(that.playOrder == 1) {
+            } else if (that.playOrder == 1) {
                 $(this).attr('title', `顺序播放`)
-            }else{
+            } else {
                 $(this).attr('title', `顺序播放`)
             }
         })
         this.offsetPage.on('click', '.num', function () { //点击页数跳转列表
             that.page = $(this).index('.num') + 1;
             that.offsetLoadPage();
-        
+
         })
         this.offsetPage.on('click', '.prevPage', function () { //分页--上一页
             that.page -= 1;
@@ -181,7 +201,7 @@ class Music {
                 that.page = that.num.length
             }
             that.offsetLoadPage();
-          
+
         })
         this.offsetPage.on('click', '.nextPage', function () { //分页--下一页
             that.page += 1;
@@ -189,7 +209,7 @@ class Music {
                 that.page = 1
             }
             that.offsetLoadPage();
-            
+
         })
         this.$play.click(() => { //播放与暂停
             if (this.isPlay) {
@@ -199,11 +219,16 @@ class Music {
             }
         });
         $('.tit .ply').click(function (e) { //切换歌单
+            // e.target.className 
+            
+            if (e.target.className.indexOf('my') === 0) {
+                return
+            }
             that.page = 1;
             that.type = $(this).attr('_id');
             that.playListId = $(this).attr('_id');
             that.isSearch = false
-            that.loadPlayList();
+            that.loadPlayList(that.playListId);
             $('.tit span').removeClass('playlist')
             $(this).addClass('playlist')
         })
@@ -255,13 +280,13 @@ class Music {
         this.music.onended = function () { //播放结束播放下一首
             $('.musicImg').removeClass('ani')
             that.initBar() //初始化控制条
-            console.log(that.playOrder)
+            
             if (that.nextMusicId.length === 0) {
                 if (that.playOrder == 1) {
                     that.randomMusic()
-                } else if(that.playOrder == 0) {
+                } else if (that.playOrder == 0) {
                     that.Index++;
-                } 
+                }
                 if (that.Index > that.musicId.length) {
                     that.Index = 0
                 }
@@ -399,9 +424,9 @@ class Music {
         if (this.isList) {
             id = this.nextMusicId[this.Index].id;
             this.nextMusicId.pop();
-            if(this.nextMusicId.length === 0){
+            if (this.nextMusicId.length === 0) {
                 this.isList = false
-            } 
+            }
         } else {
             id = this.musicId[this.Index]
         }
@@ -437,8 +462,8 @@ class Music {
             url: `${this.host}/song/url?id=${id}`,
             dataType: 'json',
             success: (data) => {
-            // let active =  [...$('tbody tr')].filter(item.attr('_id') == this.prevId);
-            // console.log(active)
+                // let active =  [...$('tbody tr')].filter(item.attr('_id') == this.prevId);
+                // 
                 if (!data.data[0].url) {
                     this.Index += 1;
                     this.toggleMusic();
@@ -460,14 +485,17 @@ class Music {
             url: `${this.host}/comment/hot?id=${id}&type=0`,
             dataType: 'json',
             success: (data) => {
+                
                 let res = data.hotComments;
                 let li = '';
                 res.forEach(item => {
                     li += ` <li>
-                    <img src=${item.user.avatarUrl}  alt="">
+                    <img src=${item.user.avatarUrl}  alt="" class="avatar">
                     <p>
                         <span>${item.user.nickname} </span>
                         ${item.content} 
+                        <img src="./image/点赞.png" class="point">
+                        <span class="like">${item.likedCount}</span>
                         <i>${this.toggleDate(item.time)}</i>
                     </p>
                 </li>`
@@ -500,9 +528,6 @@ class Music {
     }
     loadList() { //加载歌曲列表
         // this.playListId = 523519208
-        let Index = localStorage.getItem('playListId');
-        this.playListId = Index || 523519208;
-
         $.ajax({
             type: 'get',
             url: `${this.host}/playlist/detail?id=${this.playListId}`,
@@ -564,9 +589,10 @@ class Music {
     loadPlayList(id) { //加载歌单
         $.ajax({
             type: 'get',
-            url: `${this.host}/playlist/detail?id=${this.playListId}`,
+            url: `${this.host}/playlist/detail?id=${id}`,
             dataType: 'json',
             success: (data) => {
+                
                 this.musicId = data.playlist.trackIds.slice(0, 200).map(item => item.id)
                 this.offsetLoadPage()
                 let pageLi = ''
@@ -672,10 +698,10 @@ class Music {
         $('.musicImg').addClass('ani')
         $('.musicImg span').css({
             'animation-play-state': 'running'
-       })
+        })
         this.musicImg.css({
             'animation-play-state': 'running'
-       })
+        })
         this.$play.attr('src', './image/暂停.png');
         this.moveBar()
     }
@@ -685,9 +711,9 @@ class Music {
         // this.musicImg.removeClass('ani')
         $('.musicImg span').css({
             'animation-play-state': 'paused'
-       })
+        })
         this.musicImg.css({
-             'animation-play-state': 'paused'
+            'animation-play-state': 'paused'
         })
         this.$play.attr('src', './image/播放.png')
         clearInterval(this.timer)
@@ -725,6 +751,43 @@ class Music {
                 }
             });
         }, 120000)
+    }
+    loadAllPlayList() {
+        // 
+        if (localStorage.getItem('uid')) {
+            this.uid = localStorage.getItem('uid')
+        } else {
+            this.uid = 370540934
+        }
+        // this.checkUid()
+        $.ajax({
+            type: 'get',
+            url: `${this.host}/user/playlist?uid=${this.uid}`,
+            dataType: 'json',
+            success: (data) => {
+                //    
+                let li = '';
+                // this.playListId = data.playlist[0].id;
+                // localStorage.setItem('playListId', data.playlist[0].id);
+                if(data.playlist.length === 0){
+                    this.playListId = '523519208'
+                }else{
+                    this.playListId = data.playlist[0].id
+                }
+                this.loadList()
+                // 
+                data.playlist.forEach(item => {
+                    li += `<li playListId=${item.id}>${item.name}</li>`
+                })
+                li += '<li class="updateUser">修改用户</li>'
+                $('.list').html(li)
+            }
+        });
+    }
+    checkUid() {
+        if (!localStorage.getItem('uid')) {
+
+        }
     }
     //历史播放
 }
