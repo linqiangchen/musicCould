@@ -18,6 +18,7 @@ class Music {
         this.startTime = $('.time_') //音乐初始时间
         this.musicImg = $('.songs-img'); //歌曲海报
         this.loadAllPlayList();
+        this.loadHotPlayList()
         // this.loadList(), //加载歌曲列表
         this.endTime = $('.time'); //歌曲结束时间
         this.timeBal = $('.play_time'); //歌曲播放进度条
@@ -156,6 +157,10 @@ class Music {
             } else {
                 that.loadPlayList($(this).attr('playlistId'))
             }
+            return false;
+        })
+        $('.list-hot').on('click', 'li', function (e) { //点击热搜搜索      
+                that.loadPlayList($(this).attr('playlistId'))
             return false;
         })
         that.inpSearch.focus(function () { //控制热搜隐藏于显示
@@ -781,6 +786,38 @@ class Music {
                 })
                 li += '<li class="updateUser">修改用户</li>'
                 $('.list').html(li)
+            }
+        });
+    }
+    loadHotPlayList() {
+        // 
+        if (localStorage.getItem('uid')) {
+            this.uid = localStorage.getItem('uid')
+        } else {
+            this.uid = 370540934
+        }
+        // this.checkUid()
+        $.ajax({
+            type: 'get',
+            url: `${this.host}/top/playlist?limit=15&order=hot`,
+            dataType: 'json',
+            success: (data) => {
+                //    
+                let li = '';
+                // this.playListId = data.playlist[0].id;
+                // localStorage.setItem('playListId', data.playlist[0].id);
+                // if(data.playlist.length === 0){
+                //     this.playListId = '523519208'
+                // }else{
+                //     this.playListId = data.playlist[0].id
+                // }
+                // this.loadList()
+                // 
+                data.playlists.forEach(item => {
+                    li += `<li playListId=${item.id}>${item.name}</li>`
+                })
+                // li += '<li class="updateHot">修改用户</li>'
+                $('.list-hot').html(li)
             }
         });
     }

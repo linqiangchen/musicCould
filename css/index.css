@@ -106,11 +106,40 @@ body {
   line-height: 26px;
 }
 
+.box .tit span .list-hot {
+  width: 120px;
+  padding: 5px 10px;
+  position: absolute;
+  width: 250px;
+  background: #fff;
+  display: none;
+  z-index: 20;
+  transition: 0.5s;
+}
+
+.box .tit span .list-hot li {
+  font-size: 12px;
+  text-align: left;
+  width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 26px;
+}
+
 .box .tit .my {
   width: 120px;
 }
 
 .box .tit .my:hover .list {
+  display: block;
+}
+
+.box .tit .update {
+  width: 120px;
+}
+
+.box .tit .update:hover .list-hot {
   display: block;
 }
 

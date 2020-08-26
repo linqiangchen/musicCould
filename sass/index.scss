@@ -111,11 +111,43 @@ body {
                     line-height: 26px;
                 }
             }
+            .list-hot{
+                width: 120px;
+                padding:5px 10px;
+                position: absolute;
+                width: 250px;
+                // height: 600px;
+                background: #fff;
+                display: none;
+                z-index: 20;
+                // overflow: hidden;
+                transition: 0.5s;
+                li{
+                    // padding: 0;
+                    // height: 26px;
+                    // color: #666;
+                    font-size: 12px;
+                    text-align: left;
+                    width: 230px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    line-height: 26px;
+                }
+            }
         }
         .my{
             width: 120px;
         }
         .my:hover .list{
+            display: block;
+            // opacity: 1;
+            // height: max-content;
+        }
+        .update{
+            width: 120px;
+        }
+        .update:hover .list-hot{
             display: block;
             // opacity: 1;
             // height: max-content;
