@@ -42,7 +42,6 @@ class Music {
         this.prevId = '';
         this.curId = '';
         this.isList = false;
-
         this.uid = '';
     }
     toggleActive() {
@@ -145,7 +144,7 @@ class Music {
             if (e.target.className === 'updateUser') {
                 let uid = prompt("请输入自己的网易云id获取自己的歌单");
                 if (!isNaN(uid)) {
-                    this.uid = uid;
+                    that.uid = uid;
                     localStorage.setItem('uid', uid);
                     that.loadAllPlayList();
                     
@@ -155,12 +154,16 @@ class Music {
                     localStorage.setItem('uid', '370540934');
                 }
             } else {
-                that.loadPlayList($(this).attr('playlistId'))
+                that.loadPlayList($(this).attr('playlistId'));
+                $(this).parent().parent().siblings().removeClass('playlist')
+                $(this).parent().parent().addClass('playlist')
             }
             return false;
         })
         $('.list-hot').on('click', 'li', function (e) { //点击热搜搜索      
                 that.loadPlayList($(this).attr('playlistId'))
+                $(this).parent().parent().siblings().removeClass('playlist')
+                $(this).parent().parent().addClass('playlist')
             return false;
         })
         that.inpSearch.focus(function () { //控制热搜隐藏于显示
@@ -821,11 +824,7 @@ class Music {
             }
         });
     }
-    checkUid() {
-        if (!localStorage.getItem('uid')) {
 
-        }
-    }
     //历史播放
 }
 let music = new Music()
