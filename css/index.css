@@ -55,8 +55,23 @@ body {
   min-width: 1360px;
 }
 
+.bg {
+  opacity: 0.3;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 .nextPlay {
   animation: add 0.5s;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  /* Chrome Safari */
 }
 
 .box {
@@ -80,6 +95,7 @@ body {
   box-sizing: border-box;
   display: block;
   cursor: pointer;
+  width: 80px;
   font-size: 16px;
   color: maroon;
   height: 60px;
@@ -128,7 +144,7 @@ body {
 }
 
 .box .tit .my {
-  width: 120px;
+  width: 80px;
 }
 
 .box .tit .my:hover .list {
@@ -136,7 +152,7 @@ body {
 }
 
 .box .tit .update {
-  width: 120px;
+  width: 80px;
 }
 
 .box .tit .update:hover .list-hot {
@@ -187,6 +203,7 @@ body {
   border-bottom: none;
   width: 250px;
   height: 28px;
+  background-color: transparent;
 }
 
 .box .tit .search input::placeholder {
@@ -258,6 +275,10 @@ body {
 }
 
 .box .wrap .left table td {
+  border: none !important;
+}
+
+.box .wrap .left table td {
   text-align: center;
   height: 50px;
   padding: 0;
@@ -297,8 +318,9 @@ body {
 .box .wrap .left table thead tr th {
   vertical-align: middle;
   text-align: center;
-  background-color: #C62F2F;
+  background-color: transparent;
   color: #fff;
+  border: none;
 }
 
 .box .wrap .left table tbody tr {
@@ -332,6 +354,7 @@ body {
 
 .box .wrap .left nav a {
   border: 1px solid maroon;
+  background-color: transparent;
   color: maroon;
 }
 
@@ -455,7 +478,6 @@ body {
 .bottomWrap {
   width: 100%;
   margin: 0 auto;
-  background-color: #fff;
   min-width: 1360px;
   position: absolute;
   height: 60px;
@@ -483,7 +505,6 @@ body {
   margin: 0 auto;
   display: flex;
   height: 60px;
-  background-color: #FFF;
   align-items: center;
 }
 

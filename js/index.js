@@ -61,6 +61,7 @@ class Music {
                     return;
                 }
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
+                $('.bg').attr('src', data.songs[0].al.picUrl);
                 this.songName.text(data.songs[0].name);
             }
         })
@@ -195,7 +196,7 @@ class Music {
             } else if (that.playOrder == 1) {
                 $(this).attr('title', `顺序播放`)
             } else {
-                $(this).attr('title', `顺序播放`)
+                $(this).attr('title', `单曲循环`)
             }
         })
         this.offsetPage.on('click', '.num', function () { //点击页数跳转列表
@@ -345,6 +346,20 @@ class Music {
                 that.searchSong();
             }
         })
+        // this.inpSearch[0].oninput = function(){
+        //     $.ajax({
+        //         type: 'get',
+        //         url: `${that.host}/search/suggest?keywords=${that.inpSearch.val()}&type=mobile`,
+        //         dataType: 'json',
+        //         success: (data) => {
+        //             let li = '';
+        //             data.result.allMatch.slice(0, 15).forEach(item => {
+        //                 li += `<li keyword=${item.keyword}>${item.keyword}</li>`
+        //             })
+        //             $('.hot').html(li)
+        //         }
+        //     })
+        // }
         this.search.click(function () { //搜索歌曲
             if (!that.inpSearch.val().trim()) {
                 that.inpSearch.val(that.inpSearch.attr('default'))
@@ -456,6 +471,7 @@ class Music {
             dataType: 'json',
             success: (data) => {
                 $(this.music).attr('src', data.data[0].url);
+                
                 this.endTime.text(this.min(dt));
                 this.dt = dt
             }
@@ -526,6 +542,7 @@ class Music {
             dataType: 'json',
             success: (data) => {
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
+                $('.bg').attr('src', data.songs[0].al.picUrl);
                 this.songName.text(data.songs[0].name)
                 this.musicImg.removeClass('ani')
                 this.musicImg.addClass('ani')
@@ -600,7 +617,8 @@ class Music {
             url: `${this.host}/playlist/detail?id=${id}`,
             dataType: 'json',
             success: (data) => {
-                
+                this.page = 1;
+                this.Index = 0;
                 this.musicId = data.playlist.trackIds.slice(0, 200).map(item => item.id)
                 this.offsetLoadPage()
                 let pageLi = ''
@@ -653,6 +671,7 @@ class Music {
                     if (!that.isPlay) {
                         return;
                     }
+
                     if (that.lyric.length <= 1) {
                         return;
                     }

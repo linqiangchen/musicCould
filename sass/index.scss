@@ -55,19 +55,29 @@ body {
     font-family: 'Microsoft Yahei';
     min-width: 1360px;
 }
-
+.bg{
+    opacity: 0.3;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
 .nextPlay {
     animation: add 0.5s;
 }
 
-// ::-webkit-scrollbar {
-//     display: none; /* Chrome Safari */
-//   }
+::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
 .box {
+    // opacity: 0.8;
     height: calc(100% - 60px);
     width: 1260px;
     margin: 0 auto;
     .tit {
+        // background-color: #;
         width: 100%;
         height: 60px;
         display: flex;
@@ -83,6 +93,7 @@ body {
             box-sizing: border-box;
             display: block;
             cursor: pointer;
+            width: 80px;
             font-size: 16px;
             color: maroon;
             height: 60px;
@@ -137,7 +148,7 @@ body {
             }
         }
         .my{
-            width: 120px;
+            width: 80px;
         }
         .my:hover .list{
             display: block;
@@ -145,7 +156,7 @@ body {
             // height: max-content;
         }
         .update{
-            width: 120px;
+            width: 80px;
         }
         .update:hover .list-hot{
             display: block;
@@ -197,6 +208,7 @@ body {
                 // box-sizing: border-box;
                 width: 250px;
                 height: 28px;
+                background-color: transparent;
             }
 
             input::placeholder {
@@ -269,6 +281,9 @@ body {
 
            
             table {
+                td{
+                    border:none !important;
+                }
                 width: 900px;
                 text-align: center;
                 td {
@@ -310,8 +325,10 @@ body {
                             // width: 80px;
                             vertical-align: middle;
                             text-align: center;
-                            background-color: #C62F2F;
+                            // background-color: #C62F2F;
+                            background-color: transparent;
                             color: #fff;
+                            border: none;
                         }
                     }
                 }
@@ -347,9 +364,10 @@ body {
                 width: 100%;
                 text-align: center;
                 cursor: pointer;
-
+                // background-color: transparent;
                 a {
                     border: 1px solid maroon;
+                    background-color: transparent;
                     color: maroon
                 }
 
@@ -485,7 +503,7 @@ body {
 .bottomWrap {
     width: 100%;
     margin: 0 auto;
-    background-color: #fff;
+    // background-color: #fff;
     min-width: 1360px;
     position: absolute;
     height: 60px;
@@ -512,7 +530,7 @@ body {
         margin: 0 auto;
         display: flex;
         height: 60px;
-        background-color: #FFF;
+        // background-color: #FFF;
         align-items: center;
 
         .volumeImg {
