@@ -69,11 +69,6 @@ body {
   animation: add 0.5s;
 }
 
-::-webkit-scrollbar {
-  display: none;
-  /* Chrome Safari */
-}
-
 .box {
   height: calc(100% - 60px);
   width: 1260px;
@@ -159,10 +154,55 @@ body {
   display: block;
 }
 
-.box .tit .setting {
-  width: 30px;
-  height: 30px;
+.box .tit .set {
+  width: 40px;
+  position: relative;
+  display: flex;
+}
+
+.box .tit .set img {
+  margin: auto;
+  width: 20px;
+  height: 20px;
   display: block;
+}
+
+.box .tit .set:hover .setting {
+  display: block;
+}
+
+.box .tit .setting {
+  display: none;
+  top: 60px;
+  width: 120px;
+  background-color: #fff;
+  position: absolute;
+  padding: 5px;
+}
+
+.box .tit .setting li {
+  height: 18px;
+  line-height: 18px;
+  display: flex;
+  text-align: left;
+  font-size: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.box .tit .setting li label {
+  margin: 0;
+}
+
+.box .tit .setting li input {
+  margin: 0;
+  display: block;
+  height: 18px;
+}
+
+.box .tit .setting li .op {
+  width: 70px;
+  height: 4px;
 }
 
 .box .tit .playlist {

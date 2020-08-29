@@ -5,6 +5,7 @@ class Music {
     init() { //初始化数据
         this.music = document.querySelector(".music"); //audio标签
         this.music.volume = 0.5;
+        this.bgImg = localStorage.getItem('bgImg') || '0';
         this.host = 'http://eveal.cn:3003'
         this.$play = $('.c_play img'); //播放按钮
         this.musicId = []; //音乐id
@@ -43,6 +44,8 @@ class Music {
         this.curId = '';
         this.isList = false;
         this.uid = '';
+        
+        this.bgUrl = ''
     }
     toggleActive() {
         let active = [...$('tbody tr')].filter(item => $(item).attr('_id') == this.curId)
@@ -50,6 +53,9 @@ class Music {
             $('tbody tr').removeClass('activeMusic')
             $(active).addClass('activeMusic')
         }
+    }
+    initSetting(){
+
     }
     loadRight(id) { //加载歌曲海报
         $.ajax({
@@ -60,16 +66,53 @@ class Music {
                 if (!data.songs[0] || !data.songs[0].al.picUrl) {
                     return;
                 }
+                this.bgUrl =  data.songs[0].al.picUrl
+                // localStorage.getItem('bgImg')
+                // console.log(localStorage.getItem('bgImg'));
+                if(this.bgImg === '1'){
+                    // console.log('this.bgImg: ', this.bgImg);
+                    $('.bg').attr('src',this.bgUrl);
+                }
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
-                $('.bg').attr('src', data.songs[0].al.picUrl);
                 this.songName.text(data.songs[0].name);
             }
         })
     }
     bindEvent() { //绑定事件
         let that = this;
-        $('.tit i').click(function () { //全屏
-            requestFullScreen();
+        let op = +localStorage.getItem('op') || 0;
+        $('.bg').css('opacity' ,op);
+        $('.op').val(op)
+        if(this.bgImg === '1'){
+            $('.tit .bgSet')[0].checked = true;
+        }else{
+            $('.tit .bgSet')[0].checked = false;
+        }
+        $('.tit .full').click(function () { //全屏
+            if($(this)[0].checked){
+                requestFullScreen();
+            }else{
+                exitFullscreen()
+            }         // requestFullScreen();
+        })
+        $('.op')[0].oninput = function(){
+
+            $('.bg').css('opacity' ,$(this).val());
+            localStorage.setItem('op',$(this).val())
+        }
+        $('.tit .bgSet').click(function () { //全屏
+            if($(this)[0].checked){
+                console.log(that.bgUrl)
+                $('.bg').attr('src',that.bgUrl);
+                $('.bg').css('display' ,'block')
+                localStorage.setItem('bgImg',1);
+                that.bgImg = '1';
+                // that.bgImg = true
+            }else{
+                that.bgImg = '0';
+                $('.bg').css('display' ,'none')
+                localStorage.setItem('bgImg',0)
+            }         // requestFullScreen();
         })
         $('.update').click(function () {
 
@@ -346,20 +389,6 @@ class Music {
                 that.searchSong();
             }
         })
-        // this.inpSearch[0].oninput = function(){
-        //     $.ajax({
-        //         type: 'get',
-        //         url: `${that.host}/search/suggest?keywords=${that.inpSearch.val()}&type=mobile`,
-        //         dataType: 'json',
-        //         success: (data) => {
-        //             let li = '';
-        //             data.result.allMatch.slice(0, 15).forEach(item => {
-        //                 li += `<li keyword=${item.keyword}>${item.keyword}</li>`
-        //             })
-        //             $('.hot').html(li)
-        //         }
-        //     })
-        // }
         this.search.click(function () { //搜索歌曲
             if (!that.inpSearch.val().trim()) {
                 that.inpSearch.val(that.inpSearch.attr('default'))
@@ -471,7 +500,6 @@ class Music {
             dataType: 'json',
             success: (data) => {
                 $(this.music).attr('src', data.data[0].url);
-                
                 this.endTime.text(this.min(dt));
                 this.dt = dt
             }
@@ -541,8 +569,12 @@ class Music {
             url: `${this.host}/song/detail?ids=${id}`,
             dataType: 'json',
             success: (data) => {
+                this.bgUrl =  data.songs[0].al.picUrl;
                 this.musicImg.attr('src', data.songs[0].al.picUrl);
-                $('.bg').attr('src', data.songs[0].al.picUrl);
+                if(this.bgImg === '1'){
+                    // console.log('this.bgImg: ', this.bgImg);
+                    $('.bg').attr('src',this.bgUrl);
+                }
                 this.songName.text(data.songs[0].name)
                 this.musicImg.removeClass('ani')
                 this.musicImg.addClass('ani')
@@ -901,4 +933,15 @@ function requestFullScreen() {
     } else if (de.webkitRequestFullScreen) {
         de.webkitRequestFullScreen();
     }
+}
+
+function exitFullscreen() {  
+    var de = document;  
+    if (de.exitFullscreen) {  
+        de.exitFullscreen();  
+    } else if (de.mozCancelFullScreen) {  
+        de.mozCancelFullScreen();  
+    } else if (de.webkitCancelFullScreen) {  
+        de.webkitCancelFullScreen();  
+    }  
 }
